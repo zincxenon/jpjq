@@ -1,11 +1,14 @@
 package com.github.dreambrother.jpjq.executor;
 
+import com.github.dreambrother.jpjq.job.AbstractJob;
 import com.github.dreambrother.jpjq.job.Job;
+import com.github.dreambrother.jpjq.job.JobStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 
 public class JobExecutorTest {
@@ -22,7 +25,7 @@ public class JobExecutorTest {
 
     @Test
     public void shouldExecuteJob() {
-        Job job = new Job() {
+        Job job = new AbstractJob() {
             public void execute() {
                 mock.run();
             }
@@ -30,6 +33,7 @@ public class JobExecutorTest {
 
         sut.execute(job);
 
+        assertEquals(JobStatus.DONE, job.getJobStatus());
         verify(mock).run();
     }
 }
