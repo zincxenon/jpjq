@@ -14,9 +14,9 @@ import org.mockito.stubbing.Answer;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class JobExecutorTest {
+public class JobExecutorImplTest {
 
-    private JobExecutor sut = new JobExecutor();
+    private JobExecutorImpl sut = new JobExecutorImpl();
 
     private JobVisitor jobVisitor = new JobVisitorImpl();
 
