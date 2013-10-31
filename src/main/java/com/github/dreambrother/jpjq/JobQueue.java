@@ -17,10 +17,6 @@ public class JobQueue {
         jobStorage.remove(id);
     }
 
-    public void setJobStorage(JobStorage jobStorage) {
-        this.jobStorage = jobStorage;
-    }
-
     public List<? extends Job> getInProgress() {
         return jobStorage.findInProgress();
     }
@@ -31,5 +27,9 @@ public class JobQueue {
 
     public Job getById(long id) {
         return jobStorage.findById(id);
+    }
+
+    public void setJobStorage(JobStorage jobStorage) {
+        this.jobStorage = jobStorage;
     }
 }
