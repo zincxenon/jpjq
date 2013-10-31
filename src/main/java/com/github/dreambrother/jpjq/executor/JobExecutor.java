@@ -11,6 +11,7 @@ public class JobExecutor {
 
     public void execute(Job job) {
         try {
+            job.setJobStatus(JobStatus.IN_PROGRESS);
             job.execute();
             job.setJobStatus(JobStatus.DONE);
         } catch (Exception ex) {

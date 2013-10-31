@@ -7,10 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class JobExecutorTest {
 
@@ -42,5 +43,19 @@ public class JobExecutorTest {
         sut.execute(job);
 
         assertEquals(JobStatus.FAILED, job.getJobStatus());
+    }
+
+    @Test
+    public void shouldSetInProgressStatusBeforeExecute() {
+        final Job job = new MockJob(mock);
+
+        doAnswer(new Answer<Void>() {
+            public Void answer(InvocationOnMock invocationOnMock) throws Throwable {
+                assertEquals(JobStatus.IN_PROGRESS, job.getJobStatus());
+                return null;
+            }
+        }).when(mock).run();
+
+        sut.execute(job);
     }
 }
