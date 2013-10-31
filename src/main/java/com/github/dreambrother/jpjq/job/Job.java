@@ -1,4 +1,4 @@
-package com.github.dreambrother.jpjq;
+package com.github.dreambrother.jpjq.job;
 
 public interface Job {
 

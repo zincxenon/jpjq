@@ -1,6 +1,6 @@
 package com.github.dreambrother.jpjq.storage;
 
-import com.github.dreambrother.jpjq.Job;
+import com.github.dreambrother.jpjq.job.Job;
 
 public interface JobStorage {
 

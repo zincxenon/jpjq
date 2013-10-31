@@ -1,6 +1,6 @@
 package com.github.dreambrother.jpjq.executor;
 
-import com.github.dreambrother.jpjq.Job;
+import com.github.dreambrother.jpjq.job.Job;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

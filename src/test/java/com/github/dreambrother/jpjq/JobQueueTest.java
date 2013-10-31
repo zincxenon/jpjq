@@ -1,5 +1,7 @@
 package com.github.dreambrother.jpjq;
 
+import com.github.dreambrother.jpjq.job.Job;
+import com.github.dreambrother.jpjq.job.SimpleJob;
 import com.github.dreambrother.jpjq.storage.JobStorage;
 import org.junit.Before;
 import org.junit.Test;

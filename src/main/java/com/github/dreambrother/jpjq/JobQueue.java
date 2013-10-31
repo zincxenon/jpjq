@@ -1,5 +1,6 @@
 package com.github.dreambrother.jpjq;
 
+import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.storage.JobStorage;
 
 public class JobQueue {
