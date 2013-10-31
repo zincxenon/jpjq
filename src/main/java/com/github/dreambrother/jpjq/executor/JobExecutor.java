@@ -6,7 +6,11 @@ import com.github.dreambrother.jpjq.job.JobStatus;
 public class JobExecutor {
 
     public void execute(Job job) {
-        job.execute();
-        job.setJobStatus(JobStatus.DONE);
+        try {
+            job.execute();
+            job.setJobStatus(JobStatus.DONE);
+        } catch (Exception ex) {
+            job.setJobStatus(JobStatus.FAILED);
+        }
     }
 }
