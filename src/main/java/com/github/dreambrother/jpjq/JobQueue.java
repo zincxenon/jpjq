@@ -10,6 +10,10 @@ public class JobQueue {
         jobStorage.persist(job);
     }
 
+    public void cancel(long id) {
+        jobStorage.remove(id);
+    }
+
     public void setJobStorage(JobStorage jobStorage) {
         this.jobStorage = jobStorage;
     }

@@ -29,4 +29,13 @@ public class JobQueueTest {
 
         verify(jobStorageMock).persist(job);
     }
+
+    @Test
+    public void shouldCancelJob() {
+        long id = 1;
+
+        sut.cancel(id);
+
+        verify(jobStorageMock).remove(id);
+    }
 }
