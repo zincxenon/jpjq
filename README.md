@@ -1,4 +1,4 @@
-jpjq
+jPJQ
 ====
 
 Java Persistent Job Queue
