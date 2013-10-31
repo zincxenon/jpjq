@@ -40,40 +40,29 @@ public class JobQueueTest {
 
     @Test
     public void shouldCancelJob() {
-        long id = 1;
+        sut.cancel((long) 1);
 
-        sut.cancel(id);
-
-        verify(jobStorageMock).remove(id);
+        verify(jobStorageMock).remove((long) 1);
     }
 
     @Test
     public void shouldReturnInProgressJobs() {
-        List<? extends Job> jobs = Arrays.asList(new SimpleJob());
+        sut.getInProgress();
 
-        when(jobStorageMock.findInProgress()).thenAnswer(new Returns(jobs));
-        List<? extends Job> actual = sut.getInProgress();
-
-        assertEquals(jobs, actual);
+        verify(jobStorageMock).findInProgress();
     }
 
     @Test
     public void shouldReturnInitialJobs() {
-        List<? extends Job> jobs = Arrays.asList(new SimpleJob());
+        sut.getInitial();
 
-        when(jobStorageMock.findInitial()).thenAnswer(new Returns(jobs));
-        List<? extends Job> actual = sut.getInitial();
-
-        assertEquals(jobs, actual);
+        verify(jobStorageMock).findInitial();
     }
 
     @Test
     public void shouldReturnJobById() {
-        Job job = new SimpleJob();
+        sut.getById(1);
 
-        when(jobStorageMock.findById(1L)).thenReturn(job);
-        Job actual = sut.getById(1L);
-
-        assertEquals(job, actual);
+        verify(jobStorageMock).findById(1);
     }
 }
