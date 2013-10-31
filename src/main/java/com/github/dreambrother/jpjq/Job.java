@@ -1,4 +1,6 @@
 package com.github.dreambrother.jpjq;
 
-public class Job {
+public interface Job {
+
+    void execute();
 }

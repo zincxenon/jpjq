@@ -23,7 +23,7 @@ public class JobQueueTest {
 
     @Test
     public void shouldEnqueueJob() {
-        Job job = new Job();
+        Job job = new SimpleJob();
 
         sut.enqueue(job);
 
