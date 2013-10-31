@@ -3,6 +3,7 @@ package com.github.dreambrother.jpjq.executor;
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.JobStatus;
 import com.github.dreambrother.jpjq.job.MockJob;
+import com.github.dreambrother.jpjq.job.RetryJob;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,12 +18,15 @@ public class JobExecutorTest {
 
     private JobExecutor sut = new JobExecutor();
 
+    private JobVisitor jobVisitor = new JobVisitorImpl();
+
     @Mock
     private Runnable mock;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+        sut.setJobVisitor(jobVisitor);
     }
 
     @Test
@@ -57,5 +61,43 @@ public class JobExecutorTest {
         }).when(mock).run();
 
         sut.execute(job);
+    }
+
+    @Test
+    public void shouldRetryExecuteAfterExceptionInRetryJob() {
+        Job job = new RetryJob() {
+            public int retriesCount() {
+                return 2;
+            }
+            public void execute() {
+                mock.run();
+            }
+        };
+
+        doThrow(new RuntimeException("That's ok")).when(mock).run();
+        doNothing().when(mock).run();
+
+        sut.execute(job);
+
+        assertEquals(JobStatus.DONE, job.getJobStatus());
+    }
+
+    @Test
+    public void shouldFailRetryJobWhenRetryAttemptsAreExceeded() {
+        Job job = new RetryJob() {
+            public int retriesCount() {
+                return 2;
+            }
+            public void execute() {
+                mock.run();
+            }
+        };
+
+        doThrow(new RuntimeException("That's ok")).when(mock).run();
+
+        sut.execute(job);
+
+        verify(mock, times(2)).run();
+        assertEquals(JobStatus.FAILED, job.getJobStatus());
     }
 }

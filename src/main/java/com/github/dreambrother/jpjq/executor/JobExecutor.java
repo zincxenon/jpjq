@@ -9,14 +9,20 @@ public class JobExecutor {
 
     private static final Logger logger = LoggerFactory.getLogger(JobExecutor.class);
 
+    private JobVisitor jobVisitor;
+
     public void execute(Job job) {
         try {
             job.setJobStatus(JobStatus.IN_PROGRESS);
-            job.execute();
+            job.visit(jobVisitor);
             job.setJobStatus(JobStatus.DONE);
         } catch (Exception ex) {
-            logger.info("Job failed {}", job, ex);
+            logger.warn("Job failed {}", job, ex);
             job.setJobStatus(JobStatus.FAILED);
         }
+    }
+
+    public void setJobVisitor(JobVisitor jobVisitor) {
+        this.jobVisitor = jobVisitor;
     }
 }
