@@ -4,7 +4,7 @@ import com.github.dreambrother.jpjq.executor.JobVisitor;
 
 public abstract class AbstractJob implements Job {
 
-    private JobStatus jobStatus;
+    private JobStatus jobStatus = JobStatus.INITIAL;
 
     @Override
     public JobStatus getJobStatus() {
