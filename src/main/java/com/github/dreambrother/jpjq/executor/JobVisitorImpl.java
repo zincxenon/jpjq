@@ -1,7 +1,8 @@
 package com.github.dreambrother.jpjq.executor;
 
 import com.github.dreambrother.jpjq.job.Job;
-import com.github.dreambrother.jpjq.job.RetryJob;
+import com.github.dreambrother.jpjq.job.RetryWithDelayJob;
+import com.github.dreambrother.jpjq.service.DelayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,22 +10,32 @@ public class JobVisitorImpl implements JobVisitor {
 
     private static final Logger logger = LoggerFactory.getLogger(JobVisitorImpl.class);
 
+    private DelayService delayService;
+
     @Override
     public void visit(Job job) {
         job.execute();
     }
 
     @Override
-    public void visit(RetryJob retryJob) {
-        for (int i = 1; i < retryJob.retriesCount(); i++) {
+    public void visit(RetryWithDelayJob job) {
+        for (int i = 1; i < job.getAttemptCount(); i++) {
             try {
-                retryJob.execute();
+                job.execute();
                 return;
             } catch (Exception ex) {
-                logger.warn("Attempt {} for job {} with retries count {}", i, retryJob, retryJob.retriesCount());
+                logger.warn("Attempt {} for job {} with attempts count {}", i, job, job.getAttemptCount());
+                if (job.getDelay() > 0) {
+                    logger.info("Wait {} millis before next attempt");
+                    delayService.delay(job.getDelay());
+                }
             }
         }
         // last try
-        retryJob.execute();
+        job.execute();
+    }
+
+    public void setDelayService(DelayService delayService) {
+        this.delayService = delayService;
     }
 }

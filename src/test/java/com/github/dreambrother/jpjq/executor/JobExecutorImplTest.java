@@ -1,9 +1,8 @@
 package com.github.dreambrother.jpjq.executor;
 
-import com.github.dreambrother.jpjq.job.Job;
-import com.github.dreambrother.jpjq.job.JobStatus;
-import com.github.dreambrother.jpjq.job.MockJob;
-import com.github.dreambrother.jpjq.job.RetryJob;
+import com.github.dreambrother.jpjq.answer.WithExceptionsAndThenNothing;
+import com.github.dreambrother.jpjq.job.*;
+import com.github.dreambrother.jpjq.service.DelayService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,15 +16,17 @@ import static org.mockito.Mockito.*;
 public class JobExecutorImplTest {
 
     private JobExecutorImpl sut = new JobExecutorImpl();
-
-    private JobVisitor jobVisitor = new JobVisitorImpl();
+    private JobVisitorImpl jobVisitor = new JobVisitorImpl();
 
     @Mock
     private Runnable mock;
+    @Mock
+    private DelayService delayServiceMock;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+        jobVisitor.setDelayService(delayServiceMock);
         sut.setJobVisitor(jobVisitor);
     }
 
@@ -59,24 +60,18 @@ public class JobExecutorImplTest {
                 return null;
             }
         }).when(mock).run();
-
         sut.execute(job);
     }
 
     @Test
-    public void shouldRetryExecuteAfterExceptionInRetryJob() {
-        Job job = new RetryJob() {
-            public int retriesCount() {
-                return 2;
-            }
+    public void shouldRetryToExecuteAfterExceptionInRetryJob() {
+        RetryJob job = new RetryJob(2) {
             public void execute() {
                 mock.run();
             }
         };
 
-        doThrow(new RuntimeException("That's ok")).when(mock).run();
-        doNothing().when(mock).run();
-
+        doAnswer(withExceptionsAndThenNothing(1)).when(mock).run();
         sut.execute(job);
 
         assertEquals(JobStatus.DONE, job.getJobStatus());
@@ -84,20 +79,35 @@ public class JobExecutorImplTest {
 
     @Test
     public void shouldFailRetryJobWhenRetryAttemptsAreExceeded() {
-        Job job = new RetryJob() {
-            public int retriesCount() {
-                return 2;
-            }
+        RetryJob job = new RetryJob(2) {
             public void execute() {
                 mock.run();
             }
         };
 
         doThrow(new RuntimeException("That's ok")).when(mock).run();
-
         sut.execute(job);
 
-        verify(mock, times(2)).run();
+        verify(mock, times(job.getAttemptCount())).run();
         assertEquals(JobStatus.FAILED, job.getJobStatus());
+    }
+
+    @Test
+    public void shouldWaitAndRetryToExecuteAfterExceptionInRetryWithDelayJob() {
+        RetryWithDelayJob job = new RetryWithDelayJob(1000, 2) {
+            public void execute() {
+                mock.run();
+            }
+        };
+
+        doAnswer(withExceptionsAndThenNothing(1)).when(mock).run();
+        sut.execute(job);
+
+        verify(mock, times(job.getAttemptCount())).run();
+        verify(delayServiceMock, times(1)).delay(job.getDelay());
+    }
+
+    private Answer<Void> withExceptionsAndThenNothing(int exceptionsCount) {
+        return new WithExceptionsAndThenNothing(exceptionsCount);
     }
 }
