@@ -10,5 +10,8 @@ public interface JobStorage {
     void remove(long id);
     List<? extends Job> findInProgress();
     List<? extends Job> findInitial();
+    List<? extends Job> findFailed();
+    List<? extends Job> findAll();
+    List<? extends Job> findDone();
     Job findById(long id);
 }

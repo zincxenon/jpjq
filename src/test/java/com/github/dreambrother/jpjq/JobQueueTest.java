@@ -54,6 +54,27 @@ public class JobQueueTest {
     }
 
     @Test
+    public void shouldReturnFailedJobs() {
+        sut.getFailed();
+
+        verify(jobStorageMock).findFailed();
+    }
+
+    @Test
+    public void shouldReturnAllJobs() {
+        sut.getAll();
+
+        verify(jobStorageMock).findAll();
+    }
+
+    @Test
+    public void shouldReturnDoneJobs() {
+        sut.getDone();
+
+        verify(jobStorageMock).findDone();
+    }
+
+    @Test
     public void shouldReturnJobById() {
         sut.getById(1);
 

@@ -17,6 +17,10 @@ public class JobQueue {
         jobStorage.remove(id);
     }
 
+    public Job getById(long id) {
+        return jobStorage.findById(id);
+    }
+
     public List<? extends Job> getInProgress() {
         return jobStorage.findInProgress();
     }
@@ -25,8 +29,16 @@ public class JobQueue {
         return jobStorage.findInitial();
     }
 
-    public Job getById(long id) {
-        return jobStorage.findById(id);
+    public List<? extends Job> getFailed() {
+        return jobStorage.findFailed();
+    }
+
+    public List<? extends Job> getAll() {
+        return jobStorage.findAll();
+    }
+
+    public List<? extends Job> getDone() {
+        return jobStorage.findDone();
     }
 
     public void setJobStorage(JobStorage jobStorage) {
