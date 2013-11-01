@@ -34,9 +34,9 @@ public class JobQueueTest {
 
     @Test
     public void shouldCancelJob() {
-        sut.cancel((long) 1);
+        sut.cancel(1);
 
-        verify(jobStorageMock).remove((long) 1);
+        verify(jobStorageMock).remove(1);
     }
 
     @Test
