@@ -1,4 +1,4 @@
-package com.github.dreambrother.jpjq.executor;
+package com.github.dreambrother.jpjq.visitor;
 
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.RetryWithDelayJob;
@@ -6,9 +6,9 @@ import com.github.dreambrother.jpjq.service.DelayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JobVisitorImpl implements JobVisitor {
+public class ExecutorJobVisitor implements JobVisitor {
 
-    private static final Logger logger = LoggerFactory.getLogger(JobVisitorImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExecutorJobVisitor.class);
 
     private DelayService delayService;
 

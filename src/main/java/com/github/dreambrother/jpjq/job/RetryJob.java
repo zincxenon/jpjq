@@ -1,6 +1,6 @@
 package com.github.dreambrother.jpjq.job;
 
-import com.github.dreambrother.jpjq.executor.JobVisitor;
+import com.github.dreambrother.jpjq.visitor.JobVisitor;
 
 public abstract class RetryJob extends RetryWithDelayJob {
 

@@ -2,6 +2,7 @@ package com.github.dreambrother.jpjq.executor;
 
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.JobStatus;
+import com.github.dreambrother.jpjq.visitor.JobVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -3,6 +3,7 @@ package com.github.dreambrother.jpjq.executor;
 import com.github.dreambrother.jpjq.answer.WithExceptionsAndThenNothing;
 import com.github.dreambrother.jpjq.job.*;
 import com.github.dreambrother.jpjq.service.DelayService;
+import com.github.dreambrother.jpjq.visitor.ExecutorJobVisitor;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.*;
 public class JobExecutorImplTest {
 
     private JobExecutorImpl sut = new JobExecutorImpl();
-    private JobVisitorImpl jobVisitor = new JobVisitorImpl();
+    private ExecutorJobVisitor jobVisitor = new ExecutorJobVisitor();
 
     @Mock
     private Runnable mock;
