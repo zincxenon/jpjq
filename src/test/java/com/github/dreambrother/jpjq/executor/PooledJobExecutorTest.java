@@ -21,7 +21,7 @@ public class PooledJobExecutorTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
         sut.setDelegate(jobExecutorMock);
-        sut.setPoolSize(2);
+        sut.setExecutor(new CurrentThreadExecutor());
     }
 
     @Test

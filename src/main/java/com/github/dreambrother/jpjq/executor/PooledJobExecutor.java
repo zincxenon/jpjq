@@ -1,32 +1,17 @@
 package com.github.dreambrother.jpjq.executor;
 
 import com.github.dreambrother.jpjq.job.Job;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.Executor;
 
 public class PooledJobExecutor implements JobExecutor {
 
-    private static final Logger logger = LoggerFactory.getLogger(PooledJobExecutor.class);
-
     private JobExecutor jobExecutor;
-    private ExecutorService executorService;
+    private Executor executor;
 
     @Override
     public void execute(Job job) {
-        Future<?> future = executorService.submit(runnableJob(job));
-        try {
-            future.get();
-        } catch (InterruptedException e) {
-            logger.info("Thread {} was interrupted", Thread.currentThread());
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e) {
-            logger.error("PooledJobExecutor delegate should not throw exceptions!");
-        }
+        executor.execute(runnableJob(job));
     }
 
     private Runnable runnableJob(final Job job) {
@@ -41,7 +26,7 @@ public class PooledJobExecutor implements JobExecutor {
         this.jobExecutor = jobExecutor;
     }
 
-    public void setPoolSize(int poolSize) {
-        executorService = Executors.newFixedThreadPool(poolSize);
+    public void setExecutor(Executor executor) {
+        this.executor = executor;
     }
 }
