@@ -8,6 +8,7 @@
     <packaging>jar</packaging>
 
     <name>jpjq</name>
+    <description>Java Persistent Job Queue</description>
     <url>http://maven.apache.org</url>
 
     <properties>
