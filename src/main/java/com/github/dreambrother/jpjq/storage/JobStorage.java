@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface JobStorage {
 
-    void persist(Job job);
+    void store(Job job);
     void remove(long id);
     List<? extends Job> findInProgress();
     List<? extends Job> findInitial();

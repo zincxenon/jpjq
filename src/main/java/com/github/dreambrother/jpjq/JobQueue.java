@@ -10,7 +10,7 @@ public class JobQueue {
     private JobStorage jobStorage;
 
     public void enqueue(Job job) {
-        jobStorage.persist(job);
+        jobStorage.store(job);
     }
 
     public void cancel(long id) {

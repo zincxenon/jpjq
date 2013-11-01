@@ -29,7 +29,7 @@ public class JobQueueTest {
 
         sut.enqueue(job);
 
-        verify(jobStorageMock).persist(job);
+        verify(jobStorageMock).store(job);
     }
 
     @Test
