@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 
 import static com.github.dreambrother.jpjq.job.JobBuilder.doneJob;
 import static com.github.dreambrother.jpjq.job.JobBuilder.inProgressJob;
@@ -63,35 +64,41 @@ public class FileJobStorageIntTest {
 
     @Test
     public void shouldStoreAndFineInitialJobs() {
-        Job first = initialSimpleJob("1");
-        Job second = initialSimpleJob("2");
+        Job first = initialSimpleJob();
+        Job second = initialSimpleJob();
 
         storeJobs(first, second);
+        List<? extends Job> actual = sut.findInitial();
 
-        assertEquals(first, sut.findInitial().get(0));
-        assertEquals(second, sut.findInitial().get(1));
+        assertContains(actual, first, second);
     }
 
     @Test
     public void shouldStoreAndFindInProgressJobs() {
-        Job first = inProgressJob("1");
-        Job second = inProgressJob("2");
+        Job first = inProgressJob();
+        Job second = inProgressJob();
 
         storeJobs(first, second);
+        List<? extends Job> actual = sut.findInProgress();
 
-        assertEquals(first, sut.findInProgress().get(0));
-        assertEquals(second, sut.findInProgress().get(1));
+        assertContains(actual, first, second);
     }
 
     @Test
     public void shouldStoreAndFindDoneJobs() {
-        Job first = doneJob("1");
-        Job second = doneJob("2");
+        Job first = doneJob();
+        Job second = doneJob();
 
         storeJobs(first, second);
+        List<? extends Job> actual = sut.findDone();
 
-        assertEquals(first, sut.findDone().get(0));
-        assertEquals(second, sut.findDone().get(1));
+        assertContains(actual, first, second);
+    }
+
+    private void assertContains(List<? extends Job> actual, Job... jobs) {
+        for (Job job : jobs) {
+            assertTrue("Should contains stored job", actual.contains(job));
+        }
     }
 
     private void storeJobs(Job... jobs) {
