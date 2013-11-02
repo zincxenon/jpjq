@@ -51,26 +51,18 @@ public class FileJobStorage implements JobStorage {
         if (!queueDir.exists()) {
             queueDir.mkdir();
         }
+        initDir = mkDirIfNotExists("initial");
+        inProgressDir = mkDirIfNotExists("inprogress");
+        doneDir = mkDirIfNotExists("done");
+        failedDir = mkDirIfNotExists("failed");
+    }
 
-        initDir = new File(queueDir, "initial");
-        if (!initDir.exists()) {
-            initDir.mkdir();
+    private File mkDirIfNotExists(String dirName) {
+        File dir = new File(queueDir, dirName);
+        if (!dir.exists()) {
+            dir.mkdir();
         }
-
-        inProgressDir = new File(queueDir, "inprogress");
-        if (!inProgressDir.exists()) {
-            inProgressDir.mkdir();
-        }
-
-        doneDir = new File(queueDir, "done");
-        if (!doneDir.exists()) {
-            doneDir.mkdir();
-        }
-
-        failedDir = new File(queueDir, "failed");
-        if (!failedDir.exists()) {
-            failedDir.mkdir();
-        }
+        return dir;
     }
 
     private void initMappings() {
