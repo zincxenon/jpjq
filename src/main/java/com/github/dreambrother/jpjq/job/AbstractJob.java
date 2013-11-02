@@ -7,7 +7,7 @@ import org.joda.time.Instant;
 
 public abstract class AbstractJob implements Job {
 
-    private long id;
+    private String id;
     private JobStatus jobStatus = JobStatus.INITIAL;
     private Instant creationInstant;
 
@@ -27,12 +27,12 @@ public abstract class AbstractJob implements Job {
     }
 
     @Override
-    public long getId() {
+    public String getId() {
         return id;
     }
 
     @Override
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

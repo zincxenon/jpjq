@@ -13,12 +13,8 @@ public class JobQueue {
         jobStorage.store(job);
     }
 
-    public void cancel(long id) {
+    public void cancel(String id) {
         jobStorage.remove(id);
-    }
-
-    public Job getById(long id) {
-        return jobStorage.findById(id);
     }
 
     public List<? extends Job> getInProgress() {

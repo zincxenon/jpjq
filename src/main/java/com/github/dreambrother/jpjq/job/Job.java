@@ -5,8 +5,8 @@ import org.joda.time.Instant;
 
 public interface Job {
 
-    long getId();
-    void setId(long id);
+    String getId();
+    void setId(String id);
     Instant getCreationInstant();
     void setCreationInstant(Instant instant);
     void execute();

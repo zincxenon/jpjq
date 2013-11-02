@@ -34,9 +34,9 @@ public class JobQueueTest {
 
     @Test
     public void shouldCancelJob() {
-        sut.cancel(1);
+        sut.cancel("1");
 
-        verify(jobStorageMock).remove(1);
+        verify(jobStorageMock).remove("1");
     }
 
     @Test
@@ -72,12 +72,5 @@ public class JobQueueTest {
         sut.getDone();
 
         verify(jobStorageMock).findDone();
-    }
-
-    @Test
-    public void shouldReturnJobById() {
-        sut.getById(1);
-
-        verify(jobStorageMock).findById(1);
     }
 }

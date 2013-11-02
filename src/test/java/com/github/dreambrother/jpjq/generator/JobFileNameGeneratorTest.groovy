@@ -15,7 +15,7 @@ public class JobFileNameGeneratorTest {
     @Test
     public void shouldGenerateValidJobName() {
         Job job = new SimpleJob();
-        job.setId(123);
+        job.setId("123");
         job.setCreationInstant(Instant.parse("20130101 UTC", DateTimeFormat.forPattern("yyyyMMdd ZZZ")));
 
         String actual = sut.generate(job);

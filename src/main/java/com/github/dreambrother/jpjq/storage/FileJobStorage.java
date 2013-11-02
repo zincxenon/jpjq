@@ -1,5 +1,6 @@
 package com.github.dreambrother.jpjq.storage;
 
+import com.github.dreambrother.jpjq.generator.ValueGenerator;
 import com.github.dreambrother.jpjq.job.Job;
 
 import java.io.File;
@@ -12,6 +13,8 @@ public class FileJobStorage implements JobStorage {
     private File inProgressDir;
     private File doneDir;
     private File failedDir;
+
+    private ValueGenerator<Job, String> fileNameGenerator;
 
     public FileJobStorage(File queueDir) {
         if (queueDir.exists() && !queueDir.isDirectory()) {
@@ -49,11 +52,12 @@ public class FileJobStorage implements JobStorage {
 
     @Override
     public void store(Job job) {
-        throw new UnsupportedOperationException();
+        String fileName = fileNameGenerator.generate(job);
+
     }
 
     @Override
-    public void remove(long id) {
+    public void remove(String id) {
         throw new UnsupportedOperationException();
     }
 
@@ -82,8 +86,7 @@ public class FileJobStorage implements JobStorage {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public Job findById(long id) {
-        throw new UnsupportedOperationException();
+    public void setFileNameGenerator(ValueGenerator<Job, String> fileNameGenerator) {
+        this.fileNameGenerator = fileNameGenerator;
     }
 }
