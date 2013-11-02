@@ -9,9 +9,17 @@ public class JobBuilder {
     private JobBuilder() {}
 
     public static SimpleJob initialSimpleJob() {
+        return simpleJob(JobStatus.INITIAL);
+    }
+
+    public static SimpleJob inProgressJob() {
+        return simpleJob(JobStatus.IN_PROGRESS);
+    }
+
+    private static SimpleJob simpleJob(JobStatus status) {
         SimpleJob job = new SimpleJob();
         job.setId(UUID.randomUUID().toString());
-        job.setJobStatus(JobStatus.INITIAL);
+        job.setJobStatus(status);
         job.setCreationInstant(Instant.now());
         return job;
     }

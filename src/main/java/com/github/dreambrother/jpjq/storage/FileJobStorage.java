@@ -66,15 +66,17 @@ public class FileJobStorage implements JobStorage {
         String fileName = fileNameGenerator.generate(job);
         try {
             if (job.getJobStatus() == JobStatus.INITIAL) {
-                storeInitial(job, fileName);
+                storeJob(job, fileName, initDir);
+            } else if (job.getJobStatus() == JobStatus.IN_PROGRESS) {
+                storeJob(job, fileName, inProgressDir);
             }
         } catch (IOException ex) {
             throw new JobStoreException(ex);
         }
     }
 
-    private void storeInitial(Job job, String fileName) throws IOException {
-        File jobFile = new File(initDir, fileName);
+    private void storeJob(Job job, String fileName, File toDir) throws IOException {
+        File jobFile = new File(toDir, fileName);
         objectMapper.writeValue(jobFile, job);
     }
 
@@ -85,20 +87,12 @@ public class FileJobStorage implements JobStorage {
 
     @Override
     public List<? extends Job> findInProgress() {
-        throw new UnsupportedOperationException();
+        return allInFolder(inProgressDir);
     }
 
     @Override
     public List<? extends Job> findInitial() {
-        return Lists.transform(Arrays.asList(initDir.listFiles()), new Function<File, Job>() {
-            public Job apply(File file) {
-                try {
-                    return objectMapper.readValue(file, Job.class);
-                } catch (IOException ex) {
-                    throw new JobReadException(ex);
-                }
-            }
-        });
+        return allInFolder(initDir);
     }
 
     @Override
@@ -114,6 +108,18 @@ public class FileJobStorage implements JobStorage {
     @Override
     public List<? extends Job> findDone() {
         throw new UnsupportedOperationException();
+    }
+
+    private List<? extends Job> allInFolder(File dir) {
+        return Lists.transform(Arrays.asList(dir.listFiles()), new Function<File, Job>() {
+            public Job apply(File file) {
+                try {
+                    return objectMapper.readValue(file, Job.class);
+                } catch (IOException ex) {
+                    throw new JobReadException(ex);
+                }
+            }
+        });
     }
 
     public void setFileNameGenerator(ValueGenerator<Job, String> fileNameGenerator) {

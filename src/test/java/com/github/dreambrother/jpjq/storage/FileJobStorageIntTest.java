@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import static com.github.dreambrother.jpjq.job.JobBuilder.inProgressJob;
 import static com.github.dreambrother.jpjq.job.JobBuilder.initialSimpleJob;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -60,7 +61,7 @@ public class FileJobStorageIntTest {
     }
 
     @Test
-    public void shouldStoreInitialJobAndFindIt() {
+    public void shouldStoreInitialJobsAndFindIt() {
         Job first = initialSimpleJob();
         Job second = initialSimpleJob();
 
@@ -69,6 +70,18 @@ public class FileJobStorageIntTest {
 
         assertEquals(first, sut.findInitial().get(0));
         assertEquals(second, sut.findInitial().get(1));
+    }
+
+    @Test
+    public void shouldStoreInProgressJobsAndFindIt() {
+        Job first = inProgressJob();
+        Job second = inProgressJob();
+
+        sut.store(first);
+        sut.store(second);
+
+        assertEquals(first, sut.findInProgress().get(0));
+        assertEquals(second, sut.findInProgress().get(1));
     }
 
     private File assertNonExistentFileAndGet(String fileName) {
