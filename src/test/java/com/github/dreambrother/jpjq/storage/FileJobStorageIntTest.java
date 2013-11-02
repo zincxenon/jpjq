@@ -12,10 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import static com.github.dreambrother.jpjq.job.JobBuilder.doneJob;
-import static com.github.dreambrother.jpjq.job.JobBuilder.inProgressJob;
-import static com.github.dreambrother.jpjq.job.JobBuilder.initialSimpleJob;
-import static org.junit.Assert.assertEquals;
+import static com.github.dreambrother.jpjq.job.JobBuilder.*;
 import static org.junit.Assert.assertTrue;
 
 public class FileJobStorageIntTest {
@@ -91,6 +88,17 @@ public class FileJobStorageIntTest {
 
         storeJobs(first, second);
         List<? extends Job> actual = sut.findDone();
+
+        assertContains(actual, first, second);
+    }
+
+    @Test
+    public void shouldStoreAndFindFailedJobs() {
+        Job first = failedJob();
+        Job second = failedJob();
+
+        storeJobs(first, second);
+        List<? extends Job> actual = sut.findFailed();
 
         assertContains(actual, first, second);
     }

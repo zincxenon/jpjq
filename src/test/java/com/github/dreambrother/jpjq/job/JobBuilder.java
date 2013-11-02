@@ -20,6 +20,10 @@ public class JobBuilder {
         return simpleJob(JobStatus.DONE);
     }
 
+    public static SimpleJob failedJob() {
+        return simpleJob(JobStatus.FAILED);
+    }
+
     private static SimpleJob simpleJob(JobStatus status) {
         SimpleJob job = new SimpleJob();
         job.setId(UUID.randomUUID().toString());
