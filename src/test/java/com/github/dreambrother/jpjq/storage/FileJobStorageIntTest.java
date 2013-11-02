@@ -61,12 +61,14 @@ public class FileJobStorageIntTest {
 
     @Test
     public void shouldStoreInitialJobAndFindIt() {
-        Job job = initialSimpleJob();
+        Job first = initialSimpleJob();
+        Job second = initialSimpleJob();
 
-        sut.store(job);
-        Job actual = sut.findInitial().get(0);
+        sut.store(first);
+        sut.store(second);
 
-        assertEquals(job, actual);
+        assertEquals(first, sut.findInitial().get(0));
+        assertEquals(second, sut.findInitial().get(1));
     }
 
     private File assertNonExistentFileAndGet(String fileName) {
