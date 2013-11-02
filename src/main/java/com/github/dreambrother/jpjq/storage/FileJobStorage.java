@@ -69,6 +69,8 @@ public class FileJobStorage implements JobStorage {
                 storeJob(job, fileName, initDir);
             } else if (job.getJobStatus() == JobStatus.IN_PROGRESS) {
                 storeJob(job, fileName, inProgressDir);
+            } else if (job.getJobStatus() == JobStatus.DONE) {
+                storeJob(job, fileName, doneDir);
             }
         } catch (IOException ex) {
             throw new JobStoreException(ex);
@@ -107,7 +109,7 @@ public class FileJobStorage implements JobStorage {
 
     @Override
     public List<? extends Job> findDone() {
-        throw new UnsupportedOperationException();
+        return allInFolder(doneDir);
     }
 
     private List<? extends Job> allInFolder(File dir) {

@@ -2,23 +2,25 @@ package com.github.dreambrother.jpjq.job;
 
 import org.joda.time.Instant;
 
-import java.util.UUID;
-
 public class JobBuilder {
 
     private JobBuilder() {}
 
-    public static SimpleJob initialSimpleJob() {
-        return simpleJob(JobStatus.INITIAL);
+    public static SimpleJob initialSimpleJob(String id) {
+        return simpleJob(id, JobStatus.INITIAL);
     }
 
-    public static SimpleJob inProgressJob() {
-        return simpleJob(JobStatus.IN_PROGRESS);
+    public static SimpleJob inProgressJob(String id) {
+        return simpleJob(id, JobStatus.IN_PROGRESS);
+    }
+    
+    public static SimpleJob doneJob(String id) {
+        return simpleJob(id, JobStatus.DONE);
     }
 
-    private static SimpleJob simpleJob(JobStatus status) {
+    private static SimpleJob simpleJob(String id, JobStatus status) {
         SimpleJob job = new SimpleJob();
-        job.setId(UUID.randomUUID().toString());
+        job.setId(id);
         job.setJobStatus(status);
         job.setCreationInstant(Instant.now());
         return job;

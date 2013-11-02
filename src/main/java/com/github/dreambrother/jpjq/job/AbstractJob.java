@@ -5,6 +5,7 @@ import com.github.dreambrother.jpjq.visitor.JobVisitor;
 import json.InstantSerializer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.Instant;
 
 public abstract class AbstractJob implements Job {
@@ -57,5 +58,10 @@ public abstract class AbstractJob implements Job {
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

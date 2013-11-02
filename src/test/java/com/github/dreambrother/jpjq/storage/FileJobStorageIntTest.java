@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import static com.github.dreambrother.jpjq.job.JobBuilder.doneJob;
 import static com.github.dreambrother.jpjq.job.JobBuilder.inProgressJob;
 import static com.github.dreambrother.jpjq.job.JobBuilder.initialSimpleJob;
 import static org.junit.Assert.assertEquals;
@@ -61,27 +62,42 @@ public class FileJobStorageIntTest {
     }
 
     @Test
-    public void shouldStoreInitialJobsAndFindIt() {
-        Job first = initialSimpleJob();
-        Job second = initialSimpleJob();
+    public void shouldStoreAndFineInitialJobs() {
+        Job first = initialSimpleJob("1");
+        Job second = initialSimpleJob("2");
 
-        sut.store(first);
-        sut.store(second);
+        storeJobs(first, second);
 
         assertEquals(first, sut.findInitial().get(0));
         assertEquals(second, sut.findInitial().get(1));
     }
 
     @Test
-    public void shouldStoreInProgressJobsAndFindIt() {
-        Job first = inProgressJob();
-        Job second = inProgressJob();
+    public void shouldStoreAndFindInProgressJobs() {
+        Job first = inProgressJob("1");
+        Job second = inProgressJob("2");
 
-        sut.store(first);
-        sut.store(second);
+        storeJobs(first, second);
 
         assertEquals(first, sut.findInProgress().get(0));
         assertEquals(second, sut.findInProgress().get(1));
+    }
+
+    @Test
+    public void shouldStoreAndFindDoneJobs() {
+        Job first = doneJob("1");
+        Job second = doneJob("2");
+
+        storeJobs(first, second);
+
+        assertEquals(first, sut.findDone().get(0));
+        assertEquals(second, sut.findDone().get(1));
+    }
+
+    private void storeJobs(Job... jobs) {
+        for (Job job : jobs) {
+            sut.store(job);
+        }
     }
 
     private File assertNonExistentFileAndGet(String fileName) {
