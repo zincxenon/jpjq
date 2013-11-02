@@ -1,6 +1,8 @@
 package com.github.dreambrother.jpjq.job;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.dreambrother.jpjq.visitor.JobVisitor;
+import json.InstantSerializer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joda.time.Instant;
@@ -9,6 +11,7 @@ public abstract class AbstractJob implements Job {
 
     private String id;
     private JobStatus jobStatus = JobStatus.INITIAL;
+    @JsonSerialize(using = InstantSerializer.class)
     private Instant creationInstant;
 
     @Override

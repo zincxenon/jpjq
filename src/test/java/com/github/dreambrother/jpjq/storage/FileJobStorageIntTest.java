@@ -1,8 +1,11 @@
 package com.github.dreambrother.jpjq.storage;
 
+import com.github.dreambrother.jpjq.generator.JobFileNameGenerator;
 import com.github.dreambrother.jpjq.job.Job;
+import com.github.dreambrother.jpjq.job.JobStatus;
 import com.github.dreambrother.jpjq.job.SimpleJob;
 import org.apache.commons.io.FileUtils;
+import org.joda.time.Instant;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +19,8 @@ import static org.junit.Assert.assertTrue;
 
 public class FileJobStorageIntTest {
 
-    private JobStorage sut;
+    private FileJobStorage sut;
+    private JobFileNameGenerator generator = new JobFileNameGenerator();
 
     private File storeDir;
 
@@ -24,6 +28,7 @@ public class FileJobStorageIntTest {
     public void before() throws IOException {
         storeDir = Files.createTempDirectory("queue").toFile();
         sut = new FileJobStorage(storeDir);
+        sut.setFileNameGenerator(generator);
     }
 
     @After
@@ -54,6 +59,19 @@ public class FileJobStorageIntTest {
         } finally {
             FileUtils.forceDelete(queueDir);
         }
+    }
+
+    @Test
+    public void shouldStoreInitialJobAndFindIt() {
+        Job job = new SimpleJob();
+        job.setId("1");
+        job.setCreationInstant(Instant.now());
+        job.setJobStatus(JobStatus.INITIAL);
+
+        sut.store(job);
+        Job actual = sut.findInitial().get(0);
+
+        assertEquals(job, actual);
     }
 
     private File assertNonExistentFileAndGet(String fileName) {

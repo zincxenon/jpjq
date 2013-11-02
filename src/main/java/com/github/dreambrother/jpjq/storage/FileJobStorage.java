@@ -1,12 +1,22 @@
 package com.github.dreambrother.jpjq.storage;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dreambrother.jpjq.exceptions.JobReadException;
+import com.github.dreambrother.jpjq.exceptions.JobStoreException;
 import com.github.dreambrother.jpjq.generator.ValueGenerator;
 import com.github.dreambrother.jpjq.job.Job;
+import com.github.dreambrother.jpjq.job.JobStatus;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class FileJobStorage implements JobStorage {
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     private File queueDir;
     private File initDir;
@@ -22,6 +32,7 @@ public class FileJobStorage implements JobStorage {
         }
         this.queueDir = queueDir;
         initQueueStore();
+        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
     }
 
     private void initQueueStore() {
@@ -53,7 +64,18 @@ public class FileJobStorage implements JobStorage {
     @Override
     public void store(Job job) {
         String fileName = fileNameGenerator.generate(job);
+        try {
+            if (job.getJobStatus() == JobStatus.INITIAL) {
+                storeInitial(job, fileName);
+            }
+        } catch (IOException ex) {
+            throw new JobStoreException(ex);
+        }
+    }
 
+    private void storeInitial(Job job, String fileName) throws IOException {
+        File jobFile = new File(initDir, fileName);
+        objectMapper.writeValue(jobFile, job);
     }
 
     @Override
@@ -68,7 +90,15 @@ public class FileJobStorage implements JobStorage {
 
     @Override
     public List<? extends Job> findInitial() {
-        throw new UnsupportedOperationException();
+        return Lists.transform(Arrays.asList(initDir.listFiles()), new Function<File, Job>() {
+            public Job apply(File file) {
+                try {
+                    return objectMapper.readValue(file, Job.class);
+                } catch (IOException ex) {
+                    throw new JobReadException(ex);
+                }
+            }
+        });
     }
 
     @Override
