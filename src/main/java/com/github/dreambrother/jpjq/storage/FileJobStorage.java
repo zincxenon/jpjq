@@ -8,12 +8,17 @@ import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.JobStatus;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.*;
 
 public class FileJobStorage implements JobStorage {
+
+    private static final Logger logger = LoggerFactory.getLogger(FileJobStorage.class);
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -24,6 +29,8 @@ public class FileJobStorage implements JobStorage {
     private File failedDir;
 
     private ValueGenerator<Job, String> fileNameGenerator;
+
+    private List<File> jobFolders;
     private Map<JobStatus, File> jobStatusToDirMapping = new HashMap<>();
 
     public FileJobStorage(File queueDir) {
@@ -36,6 +43,8 @@ public class FileJobStorage implements JobStorage {
         initMappings();
 
         objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+
+        this.jobFolders = Arrays.asList(initDir, inProgressDir, doneDir, failedDir);
     }
 
     private void initQueueStore() {
@@ -97,7 +106,33 @@ public class FileJobStorage implements JobStorage {
 
     @Override
     public void remove(String id) {
-        throw new UnsupportedOperationException();
+        for (File folder : jobFolders) {
+            boolean removed = removeIfNotEmpty(folder.listFiles(containsIdFilter(id)), id);
+            if (removed) break;
+        }
+    }
+
+    private boolean removeIfNotEmpty(File[] files, String id) {
+        if (files.length == 0) {
+            return false;
+        } else {
+            if (files.length > 1) {
+                logger.error("Found more than one Job with same id {} !", id);
+            }
+            for (File file : files) {
+                file.delete();
+            }
+            return true;
+        }
+    }
+
+    private FilenameFilter containsIdFilter(final String id) {
+        return new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.contains(id);
+            }
+        };
     }
 
     @Override
@@ -123,15 +158,18 @@ public class FileJobStorage implements JobStorage {
     @Override
     public List<? extends Job> findAll() {
         List<Job> result = new ArrayList<>();
-        result.addAll(allInFolder(initDir));
-        result.addAll(allInFolder(inProgressDir));
-        result.addAll(allInFolder(doneDir));
-        result.addAll(allInFolder(failedDir));
+        for (File folder : jobFolders) {
+            result.addAll(allInFolder(folder));
+        }
         return result;
     }
 
     private List<? extends Job> allInFolder(File dir) {
-        return Lists.transform(Arrays.asList(dir.listFiles()), new Function<File, Job>() {
+        return Lists.transform(Arrays.asList(dir.listFiles()), readFromFileF());
+    }
+
+    private Function<File, Job> readFromFileF() {
+        return new Function<File, Job>() {
             public Job apply(File file) {
                 try {
                     return objectMapper.readValue(file, Job.class);
@@ -139,7 +177,7 @@ public class FileJobStorage implements JobStorage {
                     throw new JobReadException(ex);
                 }
             }
-        });
+        };
     }
 
     public void setFileNameGenerator(ValueGenerator<Job, String> fileNameGenerator) {

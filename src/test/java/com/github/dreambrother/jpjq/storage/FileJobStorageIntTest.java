@@ -116,9 +116,59 @@ public class FileJobStorageIntTest {
         assertContains(actual, initJob, ipJob, doneJob, failedJob);
     }
 
+    @Test
+    public void shouldRemoveInitJob() {
+        Job job = initialJob();
+
+        storeJobs(job);
+        sut.remove(job.getId());
+        List<? extends Job> actual = sut.findInitial();
+
+        assertNotContains(actual, job);
+    }
+
+    @Test
+    public void shouldRemoveInProgressJob() {
+        Job job = inProgressJob();
+
+        storeJobs(job);
+        sut.remove(job.getId());
+        List<? extends Job> actual = sut.findInProgress();
+
+        assertNotContains(actual, job);
+    }
+
+    @Test
+    public void shouldRemoveDoneJob() {
+        Job job = doneJob();
+
+        storeJobs(job);
+        sut.remove(job.getId());
+        List<? extends Job> actual = sut.findDone();
+
+        assertNotContains(actual, job);
+    }
+
+    @Test
+    public void shouldRemoveFailedJob() {
+        Job job = failedJob();
+
+        storeJobs(job);
+        sut.remove(job.getId());
+        List<? extends Job> actual = sut.findFailed();
+
+        assertNotContains(actual, job);
+    }
+
     private void assertContains(List<? extends Job> actual, Job... jobs) {
         for (Job job : jobs) {
             assertTrue("Should contains stored job", actual.contains(job));
+        }
+    }
+
+    private void assertNotContains(List<? extends Job> actual, Job... jobs) {
+        for (Job job : jobs) {
+            assertTrue("Should not contains removed job", !actual.contains(job));
         }
     }
 
