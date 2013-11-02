@@ -16,10 +16,10 @@ public class JobFileNameGeneratorTest {
     public void shouldGenerateValidJobName() {
         Job job = new SimpleJob();
         job.setId("123");
-        job.setCreationInstant(Instant.parse("20130101 UTC", DateTimeFormat.forPattern("yyyyMMdd ZZZ")));
+        job.setCreationInstant(Instant.parse("20130101 20:05:10:123 UTC", DateTimeFormat.forPattern("yyyyMMdd kk:mm:ss:SSSS ZZZ")));
 
         String actual = sut.generate(job);
 
-        assertEquals("20130101-123", actual);
+        assertEquals("2013-01-01.20-05-10-123.123", actual);
     }
 }
