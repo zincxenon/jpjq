@@ -11,10 +11,7 @@ import com.google.common.collect.Lists;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FileJobStorage implements JobStorage {
 
@@ -125,7 +122,12 @@ public class FileJobStorage implements JobStorage {
 
     @Override
     public List<? extends Job> findAll() {
-        throw new UnsupportedOperationException();
+        List<Job> result = new ArrayList<>();
+        result.addAll(allInFolder(initDir));
+        result.addAll(allInFolder(inProgressDir));
+        result.addAll(allInFolder(doneDir));
+        result.addAll(allInFolder(failedDir));
+        return result;
     }
 
     private List<? extends Job> allInFolder(File dir) {

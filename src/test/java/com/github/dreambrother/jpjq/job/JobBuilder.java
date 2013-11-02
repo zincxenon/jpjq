@@ -8,7 +8,7 @@ public class JobBuilder {
 
     private JobBuilder() {}
 
-    public static SimpleJob initialSimpleJob() {
+    public static SimpleJob initialJob() {
         return simpleJob(JobStatus.INITIAL);
     }
 

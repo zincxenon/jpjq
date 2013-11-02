@@ -61,8 +61,8 @@ public class FileJobStorageIntTest {
 
     @Test
     public void shouldStoreAndFineInitialJobs() {
-        Job first = initialSimpleJob();
-        Job second = initialSimpleJob();
+        Job first = initialJob();
+        Job second = initialJob();
 
         storeJobs(first, second);
         List<? extends Job> actual = sut.findInitial();
@@ -101,6 +101,19 @@ public class FileJobStorageIntTest {
         List<? extends Job> actual = sut.findFailed();
 
         assertContains(actual, first, second);
+    }
+
+    @Test
+    public void shouldFindAllJobs() {
+        Job initJob = initialJob();
+        Job ipJob = inProgressJob();
+        Job doneJob = doneJob();
+        Job failedJob = failedJob();
+
+        storeJobs(initJob, ipJob, doneJob, failedJob);
+        List<? extends Job> actual = sut.findAll();
+
+        assertContains(actual, initJob, ipJob, doneJob, failedJob);
     }
 
     private void assertContains(List<? extends Job> actual, Job... jobs) {
