@@ -6,7 +6,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class JobFileNameGenerator implements ValueGenerator<Job, String> {
 
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd.kk-mm-ss-SSS");
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd.kk-mm-ss");
 
     @Override
     public String generate(Job job) {
