@@ -2,7 +2,7 @@ package com.github.dreambrother.jpjq.job;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.dreambrother.jpjq.visitor.JobVisitor;
-import json.InstantSerializer;
+import com.github.dreambrother.jpjq.json.InstantSerializer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
