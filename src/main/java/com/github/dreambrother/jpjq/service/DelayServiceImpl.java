@@ -1,5 +1,6 @@
 package com.github.dreambrother.jpjq.service;
 
+import com.github.dreambrother.jpjq.utils.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,8 +13,7 @@ public class DelayServiceImpl implements DelayService {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
-            logger.info("Thread {} was interrupted", Thread.currentThread());
-            Thread.currentThread().interrupt();
+            ThreadUtils.interruptCurrentThreadWithLog(logger);
         }
     }
 }
