@@ -35,8 +35,7 @@ public class JobWatcherIntTest {
     @Before
     public void createQueueDir() throws IOException {
         MockitoAnnotations.initMocks(this);
-        queueDir = new File("target/queue");
-        queueDir.mkdir();
+        queueDir = Files.createDirectory(new File("target/queue").toPath()).toFile();
         jobStorage = new FileJobStorage(queueDir);
         jobStorage.setFileNameGenerator(new JobFileNameGenerator());
 
