@@ -1,11 +1,9 @@
 package com.github.dreambrother.jpjq.storage;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dreambrother.jpjq.exceptions.JobReadException;
-import com.github.dreambrother.jpjq.exceptions.JobStoreException;
 import com.github.dreambrother.jpjq.generator.ValueGenerator;
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.JobStatus;
+import com.github.dreambrother.jpjq.json.JobFileUtils;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -13,14 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.*;
 
 public class FileJobStorage implements JobStorage {
 
     private static final Logger logger = LoggerFactory.getLogger(FileJobStorage.class);
-
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     private File queueDir;
     private File initDir;
@@ -41,8 +36,6 @@ public class FileJobStorage implements JobStorage {
 
         initQueueStore();
         initMappings();
-
-        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
         this.jobFolders = Arrays.asList(initDir, inProgressDir, doneDir, failedDir);
     }
@@ -76,11 +69,7 @@ public class FileJobStorage implements JobStorage {
     public void store(Job job) {
         String fileName = fileNameGenerator.generate(job);
         File jobDir = getJobDir(job.getJobStatus());
-        try {
-            storeJob(job, fileName, jobDir);
-        } catch (IOException ex) {
-            throw new JobStoreException(ex);
-        }
+        storeJob(job, fileName, jobDir);
     }
 
     private File getJobDir(JobStatus jobStatus) {
@@ -91,9 +80,8 @@ public class FileJobStorage implements JobStorage {
         return jobDir;
     }
 
-    private void storeJob(Job job, String fileName, File toDir) throws IOException {
-        File jobFile = new File(toDir, fileName);
-        objectMapper.writeValue(jobFile, job);
+    private void storeJob(Job job, String fileName, File toDir) {
+        JobFileUtils.write(job, new File(toDir, fileName));
     }
 
     @Override
@@ -163,11 +151,7 @@ public class FileJobStorage implements JobStorage {
     private Function<File, Job> readFromFileF() {
         return new Function<File, Job>() {
             public Job apply(File file) {
-                try {
-                    return objectMapper.readValue(file, Job.class);
-                } catch (IOException ex) {
-                    throw new JobReadException(ex);
-                }
+                return JobFileUtils.read(file);
             }
         };
     }
