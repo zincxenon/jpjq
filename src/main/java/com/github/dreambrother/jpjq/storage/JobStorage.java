@@ -16,4 +16,5 @@ public interface JobStorage {
     List<? extends Job> findDone();
 
     void moveToInProgress(Job job);
+    void moveToDone(Job job);
 }

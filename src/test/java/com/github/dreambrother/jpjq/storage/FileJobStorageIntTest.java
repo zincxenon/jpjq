@@ -161,12 +161,23 @@ public class FileJobStorageIntTest {
     }
 
     @Test
-    public void shouldMoveFileToInProgressDir() {
+    public void shouldMoveJobToInProgressDir() {
         Job job = initialJob();
 
         storeJobs(job);
         sut.moveToInProgress(job);
         List<? extends Job> actual = sut.findInProgress();
+
+        assertContains(actual, job);
+    }
+
+    @Test
+    public void shouldMoveJobToDone() {
+        Job job = inProgressJob();
+
+        storeJobs(job);
+        sut.moveToDone(job);
+        List<? extends Job> actual = sut.findDone();
 
         assertContains(actual, job);
     }

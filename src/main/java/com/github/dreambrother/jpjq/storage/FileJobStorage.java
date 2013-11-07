@@ -7,7 +7,6 @@ import com.github.dreambrother.jpjq.job.JobStatus;
 import com.github.dreambrother.jpjq.json.JobFileUtils;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -160,18 +159,28 @@ public class FileJobStorage implements JobStorage {
 
     @Override
     public void moveToInProgress(Job job) {
+        File targetFolder = getJobDir(JobStatus.IN_PROGRESS);
+        moveJob(job, targetFolder);
+    }
+
+    @Override
+    public void moveToDone(Job job) {
+        File targetFolder = getJobDir(JobStatus.DONE);
+        moveJob(job, targetFolder);
+    }
+
+    private void moveJob(Job job, File toDir) {
         String jobFileName = fileNameGenerator.generate(job);
 
         File jobFolder = getJobDir(job.getJobStatus());
         File jobFile = new File(jobFolder, jobFileName);
 
-        File targetFolder = getJobDir(JobStatus.IN_PROGRESS);
-        File target = new File(targetFolder, jobFileName);
+        File target = new File(toDir, jobFileName);
 
-        move(jobFile, target);
+        moveFile(jobFile, target);
     }
 
-    private void move(File from, File to) {
+    private void moveFile(File from, File to) {
         boolean moved = from.renameTo(to);
         if (!moved) throw new JobStoreException("Cannot move " + from + " to " + to);
     }
