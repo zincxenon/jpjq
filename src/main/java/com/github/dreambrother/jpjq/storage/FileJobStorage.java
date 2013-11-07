@@ -1,11 +1,13 @@
 package com.github.dreambrother.jpjq.storage;
 
+import com.github.dreambrother.jpjq.exceptions.JobStoreException;
 import com.github.dreambrother.jpjq.generator.ValueGenerator;
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.JobStatus;
 import com.github.dreambrother.jpjq.json.JobFileUtils;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,6 +156,24 @@ public class FileJobStorage implements JobStorage {
                 return JobFileUtils.read(file);
             }
         };
+    }
+
+    @Override
+    public void moveToInProgress(Job job) {
+        String jobFileName = fileNameGenerator.generate(job);
+
+        File jobFolder = getJobDir(job.getJobStatus());
+        File jobFile = new File(jobFolder, jobFileName);
+
+        File targetFolder = getJobDir(JobStatus.IN_PROGRESS);
+        File target = new File(targetFolder, jobFileName);
+
+        move(jobFile, target);
+    }
+
+    private void move(File from, File to) {
+        boolean moved = from.renameTo(to);
+        if (!moved) throw new JobStoreException("Cannot move " + from + " to " + to);
     }
 
     public void setFileNameGenerator(ValueGenerator<Job, String> fileNameGenerator) {

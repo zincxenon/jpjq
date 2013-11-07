@@ -160,6 +160,17 @@ public class FileJobStorageIntTest {
         assertNotContains(actual, job);
     }
 
+    @Test
+    public void shouldMoveFileToInProgressDir() {
+        Job job = initialJob();
+
+        storeJobs(job);
+        sut.moveToInProgress(job);
+        List<? extends Job> actual = sut.findInProgress();
+
+        assertContains(actual, job);
+    }
+
     private void assertContains(List<? extends Job> actual, Job... jobs) {
         for (Job job : jobs) {
             assertTrue("Should contains stored job", actual.contains(job));

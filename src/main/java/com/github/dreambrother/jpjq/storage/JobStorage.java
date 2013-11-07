@@ -8,9 +8,12 @@ public interface JobStorage {
 
     void store(Job job);
     void remove(String id);
+
     List<? extends Job> findInProgress();
     List<? extends Job> findInitial();
     List<? extends Job> findFailed();
     List<? extends Job> findAll();
     List<? extends Job> findDone();
+
+    void moveToInProgress(Job job);
 }

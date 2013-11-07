@@ -5,4 +5,8 @@ public class JobStoreException extends RuntimeException {
     public JobStoreException(Throwable cause) {
         super(cause);
     }
+
+    public JobStoreException(String message) {
+        super(message);
+    }
 }
