@@ -112,6 +112,16 @@ public class JobExecutorImplTest {
     }
 
     @Test
+    public void shouldMoveJobToDone() {
+        Job job = initialJob();
+
+        doAnswer(assertStatusEq(JobStatus.IN_PROGRESS, job)).when(jobStorageMock).moveToDone(job);
+        sut.execute(job);
+
+        verify(jobStorageMock).moveToDone(job);
+    }
+
+    @Test
     public void shouldRetryToExecuteAfterExceptionInRetryJob() {
         RetryJob job = new RetryJob(2) {
             public void execute() {
