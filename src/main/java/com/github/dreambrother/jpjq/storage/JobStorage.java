@@ -17,4 +17,5 @@ public interface JobStorage {
 
     void moveToInProgress(Job job);
     void moveToDone(Job job);
+    void moveToFailed(Job job);
 }

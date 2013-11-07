@@ -182,6 +182,17 @@ public class FileJobStorageIntTest {
         assertContains(actual, job);
     }
 
+    @Test
+    public void shouldMoveJobToFailed() {
+        Job job = inProgressJob();
+
+        storeJobs(job);
+        sut.moveToFailed(job);
+        List<? extends Job> actual = sut.findFailed();
+
+        assertContains(actual, job);
+    }
+
     private void assertContains(List<? extends Job> actual, Job... jobs) {
         for (Job job : jobs) {
             assertTrue("Should contains stored job", actual.contains(job));

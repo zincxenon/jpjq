@@ -169,6 +169,12 @@ public class FileJobStorage implements JobStorage {
         moveJob(job, targetFolder);
     }
 
+    @Override
+    public void moveToFailed(Job job) {
+        File targetFolder = getJobDir(JobStatus.FAILED);
+        moveJob(job, targetFolder);
+    }
+
     private void moveJob(Job job, File toDir) {
         String jobFileName = fileNameGenerator.generate(job);
 
