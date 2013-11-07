@@ -1,5 +1,6 @@
 package com.github.dreambrother.jpjq.executor;
 
+import com.github.dreambrother.jpjq.exceptions.IllegalJobStatusException;
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.JobStatus;
 import com.github.dreambrother.jpjq.storage.JobStorage;
@@ -16,6 +17,7 @@ public class JobExecutorImpl implements JobExecutor {
 
     @Override
     public void execute(Job job) {
+        checkStatus(job);
         try {
             jobStorage.store(job);
 
@@ -26,6 +28,13 @@ public class JobExecutorImpl implements JobExecutor {
         } catch (Exception ex) {
             logger.warn("Job failed {}", job, ex);
             job.setJobStatus(JobStatus.FAILED);
+        }
+    }
+
+    private void checkStatus(Job job) {
+        JobStatus jobStatus = job.getJobStatus();
+        if (jobStatus != null && jobStatus != JobStatus.INITIAL) {
+            throw new IllegalJobStatusException("Illegal job status " + jobStatus + ". Must be empty or INITIAL");
         }
     }
 
