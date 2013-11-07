@@ -122,6 +122,17 @@ public class JobExecutorImplTest {
     }
 
     @Test
+    public void shouldMoveJobToFailedWhenErrorOccures() {
+        Job job = new MockJob(runnableMock);
+
+        doThrow(new RuntimeException("That's ok")).when(runnableMock).run();
+        doAnswer(assertStatusEq(JobStatus.IN_PROGRESS, job)).when(jobStorageMock).moveToFailed(job);
+        sut.execute(job);
+
+        verify(jobStorageMock).moveToFailed(job);
+    }
+
+    @Test
     public void shouldRetryToExecuteAfterExceptionInRetryJob() {
         RetryJob job = new RetryJob(2) {
             public void execute() {

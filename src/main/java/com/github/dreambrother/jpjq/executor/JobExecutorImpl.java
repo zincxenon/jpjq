@@ -29,6 +29,8 @@ public class JobExecutorImpl implements JobExecutor {
             job.setJobStatus(JobStatus.DONE);
         } catch (Exception ex) {
             logger.warn("Job failed {}", job, ex);
+
+            jobStorage.moveToFailed(job);
             job.setJobStatus(JobStatus.FAILED);
         }
     }
