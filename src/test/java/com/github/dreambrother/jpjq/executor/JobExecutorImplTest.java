@@ -134,11 +134,7 @@ public class JobExecutorImplTest {
 
     @Test
     public void shouldRetryToExecuteAfterExceptionInRetryJob() {
-        RetryJob job = new RetryJob(2) {
-            public void execute() {
-                runnableMock.run();
-            }
-        };
+        RetryJob job = new RetryMockJob(2, runnableMock);
 
         doAnswer(withExceptionsAndThenNothing(1)).when(runnableMock).run();
         sut.execute(job);
@@ -148,11 +144,7 @@ public class JobExecutorImplTest {
 
     @Test
     public void shouldFailRetryJobWhenRetryAttemptsAreExceeded() {
-        RetryJob job = new RetryJob(2) {
-            public void execute() {
-                runnableMock.run();
-            }
-        };
+        RetryJob job = new RetryMockJob(2, runnableMock);
 
         doThrow(new RuntimeException("That's ok")).when(runnableMock).run();
         sut.execute(job);
@@ -163,11 +155,7 @@ public class JobExecutorImplTest {
 
     @Test
     public void shouldWaitAndRetryToExecuteAfterExceptionInRetryWithDelayJob() {
-        RetryWithDelayJob job = new RetryWithDelayJob(1000, 2) {
-            public void execute() {
-                runnableMock.run();
-            }
-        };
+        RetryWithDelayJob job = new RetryWithDelayMockJob(1000, 2, runnableMock);
 
         doAnswer(withExceptionsAndThenNothing(1)).when(runnableMock).run();
         sut.execute(job);
