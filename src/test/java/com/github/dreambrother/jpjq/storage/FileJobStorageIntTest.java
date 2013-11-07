@@ -35,7 +35,7 @@ public class FileJobStorageIntTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void constructorShouldThrowExceptionIfQueueDirIsFile() throws IOException {
+    public void constructorShouldThrowExceptionIfQueueFileIsNotDirectory() throws IOException {
         File tmp = Files.createTempFile("test", "constructor").toFile();
         try {
             new FileJobStorage(tmp);
