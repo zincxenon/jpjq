@@ -83,10 +83,12 @@ public class JobExecutorImplTest {
 
     @Test
     public void shouldSetInProgressStatusBeforeExecute() {
-        final Job job = new MockJob(runnableMock);
+        Job job = new MockJob(runnableMock);
 
         doAnswer(assertStatusEq(JobStatus.IN_PROGRESS, job)).when(runnableMock).run();
         sut.execute(job);
+
+        verify(runnableMock).run();
     }
 
     @Test
@@ -95,6 +97,8 @@ public class JobExecutorImplTest {
 
         doAnswer(assertStatusEq(JobStatus.INITIAL, job)).when(jobStorageMock).store(job);
         sut.execute(job);
+
+        verify(jobStorageMock).store(job);
     }
 
     @Test
