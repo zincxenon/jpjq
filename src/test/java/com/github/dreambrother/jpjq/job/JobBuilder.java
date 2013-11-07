@@ -24,6 +24,13 @@ public class JobBuilder {
         return simpleJob(JobStatus.FAILED);
     }
 
+    public static SimpleJob emptyJob() {
+        SimpleJob job = new SimpleJob();
+        job.setCreationInstant(null);
+        job.setJobStatus(null);
+        return job;
+    }
+
     private static SimpleJob simpleJob(JobStatus status) {
         SimpleJob job = new SimpleJob();
         job.setId(UUID.randomUUID().toString());

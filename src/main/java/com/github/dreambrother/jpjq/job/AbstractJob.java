@@ -13,7 +13,7 @@ public abstract class AbstractJob implements Job {
     private String id;
     private JobStatus jobStatus = JobStatus.INITIAL;
     @JsonSerialize(using = InstantSerializer.class)
-    private Instant creationInstant;
+    private Instant creationInstant = Instant.now();
 
     @Override
     public JobStatus getJobStatus() {
