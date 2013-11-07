@@ -8,6 +8,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.Instant;
 
+/**
+ * Not thread safe. Do not share between threads.
+ */
 public abstract class AbstractJob implements Job {
 
     private String id;
