@@ -159,8 +159,4 @@ public class FileJobStorage implements JobStorage {
     public void setFileNameGenerator(ValueGenerator<Job, String> fileNameGenerator) {
         this.fileNameGenerator = fileNameGenerator;
     }
-
-    public File getInitDir() {
-        return initDir;
-    }
 }
