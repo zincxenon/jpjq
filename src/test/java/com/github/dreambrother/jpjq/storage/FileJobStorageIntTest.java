@@ -21,9 +21,14 @@ public class FileJobStorageIntTest {
     private JobFileNameGenerator generator = new JobFileNameGenerator();
 
     private File storeDir;
+    private File tmpDir;
+    private File emptyFile;
 
     @Before
     public void before() throws IOException {
+        tmpDir = Files.createTempDirectory("tmpDir").toFile();
+        emptyFile = new File(tmpDir, "empty");
+
         storeDir = Files.createTempDirectory("queue").toFile();
         sut = new FileJobStorage(storeDir);
         sut.setFileNameGenerator(generator);
@@ -32,6 +37,7 @@ public class FileJobStorageIntTest {
     @After
     public void after() throws IOException {
         FileUtils.forceDelete(storeDir);
+        FileUtils.forceDelete(tmpDir);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -45,18 +51,33 @@ public class FileJobStorageIntTest {
     }
 
     @Test
-    public void shouldCreateNecessaryFoldersForWork() throws IOException {
-        File queueDir = assertNonExistentFileAndGet("target/tmpQueue");
-        try {
-            new FileJobStorage(queueDir);
-            assertTrue("should create queue store folder", queueDir.exists());
-            assertTrue("should create 'initial' sub-folder", new File(queueDir, "initial").exists());
-            assertTrue("should create 'inprogress' sub-folder", new File(queueDir, "inprogress").exists());
-            assertTrue("should create 'done' sub-folder", new File(queueDir, "done").exists());
-            assertTrue("should create 'failed' sub-folder", new File(queueDir, "failed").exists());
-        } finally {
-            FileUtils.forceDelete(queueDir);
-        }
+    public void shouldCreateQueueStoreFolder() throws IOException {
+        new FileJobStorage(emptyFile);
+        assertTrue("should create queue store folder", emptyFile.exists());
+    }
+
+    @Test
+    public void shouldCreateInitialSubfolder() {
+        new FileJobStorage(emptyFile);
+        assertTrue("should create 'initial' sub-folder", new File(emptyFile, "initial").exists());
+    }
+
+    @Test
+    public void shouldCreateInProgressSubfolder() {
+        new FileJobStorage(emptyFile);
+        assertTrue("should create 'inprogress' sub-folder", new File(emptyFile, "inprogress").exists());
+    }
+
+    @Test
+    public void shouldCreateDoneSubfolder() {
+        new FileJobStorage(emptyFile);
+        assertTrue("should create 'done' sub-folder", new File(emptyFile, "done").exists());
+    }
+
+    @Test
+    public void shouldCreateFailedSubfolder() {
+        new FileJobStorage(emptyFile);
+        assertTrue("should create 'failed' sub-folder", new File(emptyFile, "failed").exists());
     }
 
     @Test
@@ -209,13 +230,5 @@ public class FileJobStorageIntTest {
         for (Job job : jobs) {
             sut.store(job);
         }
-    }
-
-    private File assertNonExistentFileAndGet(String fileName) {
-        File file = new File(fileName);
-        if (file.exists()) {
-            throw new AssertionError("File " + file.getAbsolutePath() + " already exists");
-        }
-        return file;
     }
 }
