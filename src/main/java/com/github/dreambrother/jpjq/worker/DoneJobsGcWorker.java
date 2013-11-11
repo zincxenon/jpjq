@@ -23,6 +23,10 @@ public class DoneJobsGcWorker implements Runnable {
         }
     }
 
+    public Duration getExpirationDuration() {
+        return expirationDuration;
+    }
+
     public void setExpirationDuration(Duration expirationDuration) {
         this.expirationDuration = expirationDuration;
     }
