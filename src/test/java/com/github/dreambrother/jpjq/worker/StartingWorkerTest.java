@@ -36,9 +36,8 @@ public class StartingWorkerTest {
         List<? extends Job> jobs = Arrays.asList(initialJob(), initialJob());
 
         doReturn(jobs).when(jobStorageMock).findInitial();
-        sut.start();
+        sut.run();
 
-        verify(jobStorageMock, times(1)).findInitial();
         verifyJobExecutorWasCalledWith(jobs);
     }
 
@@ -47,9 +46,8 @@ public class StartingWorkerTest {
         List<? extends Job> jobs = Arrays.asList(inProgressJob(), inProgressJob());
 
         doReturn(jobs).when(jobStorageMock).findInProgress();
-        sut.start();
+        sut.run();
 
-        verify(jobStorageMock, times(1)).findInProgress();
         verifyJobExecutorWasCalledWith(jobs);
     }
 

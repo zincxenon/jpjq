@@ -11,7 +11,7 @@ public class StartingWorker {
     private JobStorage jobStorage;
     private JobExecutor jobExecutor;
 
-    public void start() {
+    public void run() {
         List<? extends Job> initialJobs = jobStorage.findInitial();
         for (Job job : initialJobs) {
             jobExecutor.execute(job);
