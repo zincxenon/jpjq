@@ -8,6 +8,7 @@ public interface JobStorage {
 
     void store(Job job);
     void remove(String id);
+    void remove(Job job);
 
     List<? extends Job> findInProgress();
     List<? extends Job> findInitial();

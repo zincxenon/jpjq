@@ -93,6 +93,13 @@ public class FileJobStorage implements JobStorage {
         }
     }
 
+    @Override
+    public void remove(Job job) {
+        String jobFileName = fileNameGenerator.generate(job);
+        File jobDir = getJobDir(job.getJobStatus());
+        new File(jobDir, jobFileName).delete();
+    }
+
     private boolean removeIfNotEmpty(File[] files, String id) {
         if (files.length == 0) {
             return false;

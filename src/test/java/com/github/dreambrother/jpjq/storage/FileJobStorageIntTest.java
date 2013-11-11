@@ -138,7 +138,7 @@ public class FileJobStorageIntTest {
     }
 
     @Test
-    public void shouldRemoveInitJob() {
+    public void shouldRemoveInitJobById() {
         Job job = initialJob();
 
         storeJobs(job);
@@ -149,7 +149,7 @@ public class FileJobStorageIntTest {
     }
 
     @Test
-    public void shouldRemoveInProgressJob() {
+    public void shouldRemoveInProgressJobById() {
         Job job = inProgressJob();
 
         storeJobs(job);
@@ -160,7 +160,7 @@ public class FileJobStorageIntTest {
     }
 
     @Test
-    public void shouldRemoveDoneJob() {
+    public void shouldRemoveDoneJobById() {
         Job job = doneJob();
 
         storeJobs(job);
@@ -171,11 +171,55 @@ public class FileJobStorageIntTest {
     }
 
     @Test
-    public void shouldRemoveFailedJob() {
+    public void shouldRemoveFailedJobById() {
         Job job = failedJob();
 
         storeJobs(job);
         sut.remove(job.getId());
+        List<? extends Job> actual = sut.findFailed();
+
+        assertNotContains(actual, job);
+    }
+
+    @Test
+    public void shouldRemoveInitJob() {
+        Job job = initialJob();
+
+        storeJobs(job);
+        sut.remove(job);
+        List<? extends Job> actual = sut.findInitial();
+
+        assertNotContains(actual, job);
+    }
+
+    @Test
+    public void shouldRemoveInProgressJob() {
+        Job job = inProgressJob();
+
+        storeJobs(job);
+        sut.remove(job);
+        List<? extends Job> actual = sut.findInProgress();
+
+        assertNotContains(actual, job);
+    }
+
+    @Test
+    public void shouldRemoveDoneJob() {
+        Job job = doneJob();
+
+        storeJobs(job);
+        sut.remove(job);
+        List<? extends Job> actual = sut.findDone();
+
+        assertNotContains(actual, job);
+    }
+
+    @Test
+    public void shouldRemoveFailedJob() {
+        Job job = failedJob();
+
+        storeJobs(job);
+        sut.remove(job);
         List<? extends Job> actual = sut.findFailed();
 
         assertNotContains(actual, job);
