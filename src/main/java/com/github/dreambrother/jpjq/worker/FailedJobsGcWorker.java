@@ -5,10 +5,10 @@ import com.github.dreambrother.jpjq.storage.JobStorage;
 
 import java.util.List;
 
-public class DoneJobsGcWorker extends JobsGcWorkerSupport {
+public class FailedJobsGcWorker extends JobsGcWorkerSupport {
 
     @Override
     protected List<? extends Job> findJobs(JobStorage jobStorage) {
-        return jobStorage.findDone();
+        return jobStorage.findFailed();
     }
 }

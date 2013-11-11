@@ -10,12 +10,12 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
-import static com.github.dreambrother.jpjq.job.JobBuilder.doneJob;
+import static com.github.dreambrother.jpjq.job.JobBuilder.failedJob;
 import static org.mockito.Mockito.*;
 
-public class DoneJobsGcWorkerTest extends JobsGcWorkerTestSupport {
+public class FailedJobsGcWorkerTest extends JobsGcWorkerTestSupport {
 
-    private DoneJobsGcWorker sut = new DoneJobsGcWorker();
+    private FailedJobsGcWorker sut = new FailedJobsGcWorker();
 
     @Mock
     private JobStorage jobStorageMock;
@@ -31,7 +31,7 @@ public class DoneJobsGcWorkerTest extends JobsGcWorkerTestSupport {
     public void shouldRemoveExpiredDoneJobs() {
         List<? extends Job> jobs = getExpiredJobs();
 
-        doReturn(jobs).when(jobStorageMock).findDone();
+        doReturn(jobs).when(jobStorageMock).findFailed();
         sut.run();
 
         verifyJobStorageWasCalledWith(jobs);
@@ -41,10 +41,10 @@ public class DoneJobsGcWorkerTest extends JobsGcWorkerTestSupport {
     public void shouldNotRemoveNotExpiredJobs() {
         List<? extends Job> jobs = getValidJobs();
 
-        doReturn(jobs).when(jobStorageMock).findDone();
+        doReturn(jobs).when(jobStorageMock).findFailed();
         sut.run();
 
-        verify(jobStorageMock, times(1)).findDone();
+        verify(jobStorageMock, times(1)).findFailed();
         verifyNoMoreInteractions(jobStorageMock);
     }
 
@@ -55,7 +55,7 @@ public class DoneJobsGcWorkerTest extends JobsGcWorkerTestSupport {
 
     @Override
     protected Job getConcreteJob() {
-        return doneJob();
+        return failedJob();
     }
 
     @Override
