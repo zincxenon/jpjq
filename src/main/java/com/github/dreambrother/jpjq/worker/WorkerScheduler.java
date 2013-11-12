@@ -7,7 +7,7 @@ public class WorkerScheduler {
 
     private ScheduledExecutorService scheduledExecutorService;
 
-    public void scheduleDoneJobsGcWorker(DoneJobsGcWorker worker) {
+    public void scheduleJobsGcWorker(JobsGcWorker worker) {
         scheduledExecutorService.scheduleWithFixedDelay(
                 worker,
                 worker.getExpirationDuration().getMillis(),

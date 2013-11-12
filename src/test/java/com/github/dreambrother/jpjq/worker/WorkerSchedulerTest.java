@@ -19,7 +19,7 @@ public class WorkerSchedulerTest {
     @Mock
     private ScheduledExecutorService executorServiceMock;
     @Mock
-    private DoneJobsGcWorker doneJobsGcWorkerMock;
+    private JobsGcWorker jobsGcWorkerMock;
 
     @Before
     public void init() {
@@ -28,12 +28,12 @@ public class WorkerSchedulerTest {
     }
 
     @Test
-    public void shouldScheduleDoneJobsGcWorker() {
-        when(doneJobsGcWorkerMock.getExpirationDuration()).thenReturn(expirationDuration);
-        sut.scheduleDoneJobsGcWorker(doneJobsGcWorkerMock);
+    public void shouldScheduleJobsGcWorker() {
+        when(jobsGcWorkerMock.getExpirationDuration()).thenReturn(expirationDuration);
+        sut.scheduleJobsGcWorker(jobsGcWorkerMock);
 
         verify(executorServiceMock, times(1)).scheduleWithFixedDelay(
-                doneJobsGcWorkerMock,
+                jobsGcWorkerMock,
                 expirationDuration.getMillis(),
                 expirationDuration.getMillis(),
                 TimeUnit.MILLISECONDS);

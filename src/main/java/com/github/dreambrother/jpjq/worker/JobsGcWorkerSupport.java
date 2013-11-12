@@ -7,7 +7,7 @@ import org.joda.time.Instant;
 
 import java.util.List;
 
-public abstract class JobsGcWorkerSupport implements Runnable {
+public abstract class JobsGcWorkerSupport implements JobsGcWorker {
 
     private Duration expirationDuration;
     private JobStorage jobStorage;
@@ -25,6 +25,7 @@ public abstract class JobsGcWorkerSupport implements Runnable {
 
     protected abstract List<? extends Job> findJobs(JobStorage jobStorage);
 
+    @Override
     public Duration getExpirationDuration() {
         return expirationDuration;
     }
