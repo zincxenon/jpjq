@@ -1,5 +1,6 @@
 package com.github.dreambrother.jpjq;
 
+import com.github.dreambrother.jpjq.executor.JobExecutor;
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.SimpleJob;
 import com.github.dreambrother.jpjq.storage.JobStorage;
@@ -16,11 +17,14 @@ public class JobQueueTest {
 
     @Mock
     private JobStorage jobStorageMock;
+    @Mock
+    private JobExecutor jobExecutorMock;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
         sut.setJobStorage(jobStorageMock);
+        sut.setJobExecutor(jobExecutorMock);
     }
 
     @Test
@@ -30,6 +34,7 @@ public class JobQueueTest {
         sut.enqueue(job);
 
         verify(jobStorageMock).store(job);
+        verify(jobExecutorMock).execute(job);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.github.dreambrother.jpjq;
 
+import com.github.dreambrother.jpjq.executor.JobExecutor;
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.storage.JobStorage;
 
@@ -8,9 +9,11 @@ import java.util.List;
 public class JobQueue {
 
     private JobStorage jobStorage;
+    private JobExecutor jobExecutor;
 
     public void enqueue(Job job) {
         jobStorage.store(job);
+        jobExecutor.execute(job);
     }
 
     public void cancel(String id) {
@@ -39,5 +42,9 @@ public class JobQueue {
 
     public void setJobStorage(JobStorage jobStorage) {
         this.jobStorage = jobStorage;
+    }
+
+    public void setJobExecutor(JobExecutor jobExecutor) {
+        this.jobExecutor = jobExecutor;
     }
 }
