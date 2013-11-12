@@ -1,6 +1,5 @@
 package com.github.dreambrother.jpjq.executor;
 
-import com.github.dreambrother.jpjq.exceptions.IllegalJobStatusException;
 import com.github.dreambrother.jpjq.job.*;
 import com.github.dreambrother.jpjq.service.DelayService;
 import com.github.dreambrother.jpjq.storage.JobStorage;
@@ -12,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import static com.github.dreambrother.jpjq.answer.Answers.assertStatusEq;
 import static com.github.dreambrother.jpjq.answer.Answers.withExceptionsAndThenNothing;
-import static com.github.dreambrother.jpjq.job.JobBuilder.*;
+import static com.github.dreambrother.jpjq.job.JobBuilder.initialJob;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -34,31 +33,6 @@ public class JobExecutorImplTest {
         jobVisitor.setDelayService(delayServiceMock);
         sut.setJobVisitor(jobVisitor);
         sut.setJobStorage(jobStorageMock);
-    }
-
-    @Test
-    public void shouldAcceptEmptyStatusJob() {
-        sut.execute(emptyJob());
-    }
-
-    @Test
-    public void shouldAcceptInitialJob() {
-        sut.execute(initialJob());
-    }
-
-    @Test(expected = IllegalJobStatusException.class)
-    public void shouldNotAcceptInProgressJob() {
-        sut.execute(inProgressJob());
-    }
-
-    @Test(expected = IllegalJobStatusException.class)
-    public void shouldNotAcceptDoneJob() {
-        sut.execute(doneJob());
-    }
-
-    @Test(expected = IllegalJobStatusException.class)
-    public void shouldNotAcceptFailedJob() {
-        sut.execute(failedJob());
     }
 
     @Test
