@@ -14,12 +14,12 @@ public class JobQueue {
     private JobExecutor jobExecutor;
 
     public void enqueue(Job job) {
-        checkThatStatusIsInitial(job);
+        checkThatStatusIsEmptyOrInitial(job);
         jobStorage.store(job);
         jobExecutor.execute(job);
     }
 
-    private void checkThatStatusIsInitial(Job job) {
+    private void checkThatStatusIsEmptyOrInitial(Job job) {
         JobStatus jobStatus = job.getJobStatus();
         if (jobStatus != null && jobStatus != JobStatus.INITIAL) {
             throw new IllegalJobStatusException("Illegal job status " + jobStatus + ". Must be empty or INITIAL");
