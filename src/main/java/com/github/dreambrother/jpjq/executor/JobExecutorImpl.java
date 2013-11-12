@@ -19,8 +19,6 @@ public class JobExecutorImpl implements JobExecutor {
     public void execute(Job job) {
         checkStatus(job);
         try {
-            jobStorage.store(job);
-
             jobStorage.moveToInProgress(job);
             job.setJobStatus(JobStatus.IN_PROGRESS);
             job.visit(jobVisitor);

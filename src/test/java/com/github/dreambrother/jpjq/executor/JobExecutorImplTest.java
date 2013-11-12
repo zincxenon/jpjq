@@ -92,16 +92,6 @@ public class JobExecutorImplTest {
     }
 
     @Test
-    public void shouldStoreInProgressJob() {
-        Job job = initialJob();
-
-        doAnswer(assertStatusEq(JobStatus.INITIAL, job)).when(jobStorageMock).store(job);
-        sut.execute(job);
-
-        verify(jobStorageMock).store(job);
-    }
-
-    @Test
     public void shouldMoveJobToInProgress() {
         Job job = initialJob();
 
