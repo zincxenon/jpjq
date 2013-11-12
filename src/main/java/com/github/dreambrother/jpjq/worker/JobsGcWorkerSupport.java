@@ -25,11 +25,6 @@ public abstract class JobsGcWorkerSupport implements JobsGcWorker {
 
     protected abstract List<? extends Job> findJobs(JobStorage jobStorage);
 
-    @Override
-    public Duration getExpirationDuration() {
-        return expirationDuration;
-    }
-
     public void setExpirationDuration(Duration expirationDuration) {
         this.expirationDuration = expirationDuration;
     }

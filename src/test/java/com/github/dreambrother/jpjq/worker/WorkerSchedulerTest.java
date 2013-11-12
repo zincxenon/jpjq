@@ -9,12 +9,12 @@ import org.mockito.MockitoAnnotations;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 public class WorkerSchedulerTest {
 
     private WorkerScheduler sut = new WorkerScheduler();
-    private Duration expirationDuration = Duration.standardHours(1);
+    private Duration delay = Duration.millis(100);
 
     @Mock
     private ScheduledExecutorService executorServiceMock;
@@ -29,13 +29,12 @@ public class WorkerSchedulerTest {
 
     @Test
     public void shouldScheduleJobsGcWorker() {
-        when(jobsGcWorkerMock.getExpirationDuration()).thenReturn(expirationDuration);
-        sut.scheduleJobsGcWorker(jobsGcWorkerMock);
+        sut.scheduleJobsGcWorker(jobsGcWorkerMock, delay);
 
-        verify(executorServiceMock, times(1)).scheduleWithFixedDelay(
+        verify(executorServiceMock).scheduleAtFixedRate(
                 jobsGcWorkerMock,
-                expirationDuration.getMillis(),
-                expirationDuration.getMillis(),
+                delay.getMillis(),
+                delay.getMillis(),
                 TimeUnit.MILLISECONDS);
     }
 }
