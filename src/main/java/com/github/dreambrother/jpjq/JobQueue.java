@@ -1,11 +1,13 @@
 package com.github.dreambrother.jpjq;
 
+import com.github.dreambrother.jpjq.builder.JobQueueBuilder;
 import com.github.dreambrother.jpjq.exceptions.IllegalJobStatusException;
 import com.github.dreambrother.jpjq.executor.JobExecutor;
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.JobStatus;
 import com.github.dreambrother.jpjq.storage.JobStorage;
 
+import java.io.File;
 import java.util.List;
 
 public class JobQueue {
@@ -52,5 +54,9 @@ public class JobQueue {
 
     public void setJobExecutor(JobExecutor jobExecutor) {
         this.jobExecutor = jobExecutor;
+    }
+
+    public static JobQueueBuilder builder(File queueDir) {
+        return new JobQueueBuilder(queueDir);
     }
 }
