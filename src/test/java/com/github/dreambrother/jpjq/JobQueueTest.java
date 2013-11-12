@@ -66,13 +66,6 @@ public class JobQueueTest {
     }
 
     @Test
-    public void shouldCancelJob() {
-        sut.cancel("1");
-
-        verify(jobStorageMock).remove("1");
-    }
-
-    @Test
     public void shouldReturnInProgressJobs() {
         sut.getInProgress();
 

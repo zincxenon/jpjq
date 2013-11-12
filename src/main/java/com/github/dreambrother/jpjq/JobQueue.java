@@ -26,10 +26,6 @@ public class JobQueue {
         }
     }
 
-    public void cancel(String id) {
-        jobStorage.remove(id);
-    }
-
     public List<? extends Job> getInProgress() {
         return jobStorage.findInProgress();
     }
