@@ -2,6 +2,7 @@ package com.github.dreambrother.jpjq.storage;
 
 import com.github.dreambrother.jpjq.generator.JobFileNameGenerator;
 import com.github.dreambrother.jpjq.job.Job;
+import com.github.dreambrother.jpjq.job.JobStatus;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 import java.util.List;
 
 import static com.github.dreambrother.jpjq.job.JobBuilder.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class FileJobStorageIntTest {
@@ -226,13 +228,14 @@ public class FileJobStorageIntTest {
     }
 
     @Test
-    public void shouldMoveJobToInProgressDir() {
+    public void shouldChangeJobStatus() {
         Job job = initialJob();
 
         storeJobs(job);
-        sut.moveToInProgress(job);
+        sut.changeJobStatus(job, JobStatus.IN_PROGRESS);
         List<? extends Job> actual = sut.findInProgress();
 
+        assertEquals(JobStatus.IN_PROGRESS, job.getJobStatus());
         assertContains(actual, job);
     }
 

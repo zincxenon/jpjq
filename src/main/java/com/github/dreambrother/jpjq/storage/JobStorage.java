@@ -1,6 +1,7 @@
 package com.github.dreambrother.jpjq.storage;
 
 import com.github.dreambrother.jpjq.job.Job;
+import com.github.dreambrother.jpjq.job.JobStatus;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface JobStorage {
     void moveToInProgress(Job job);
     void moveToDone(Job job);
     void moveToFailed(Job job);
+
+    void changeJobStatus(Job job, JobStatus jobStatus);
 }

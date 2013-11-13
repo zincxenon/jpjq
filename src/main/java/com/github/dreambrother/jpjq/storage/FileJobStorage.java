@@ -68,7 +68,9 @@ public class FileJobStorage implements JobStorage {
 
     @Override
     public void store(Job job) {
-        String fileName = fileNameGenerator.generate(job);
+        logger.debug("About to store job {}", job);
+
+        String fileName = getJobFileName(job);
         File jobDir = getJobDir(job.getJobStatus());
         storeJob(job, fileName, jobDir);
     }
@@ -87,6 +89,8 @@ public class FileJobStorage implements JobStorage {
 
     @Override
     public void remove(String id) {
+        logger.debug("About to remove job with id {}", id);
+
         for (File folder : jobFolders) {
             boolean removed = removeIfNotEmpty(folder.listFiles(containsIdFilter(id)), id);
             if (removed) break;
@@ -95,7 +99,9 @@ public class FileJobStorage implements JobStorage {
 
     @Override
     public void remove(Job job) {
-        String jobFileName = fileNameGenerator.generate(job);
+        logger.debug("About to remove job {}", job);
+
+        String jobFileName = getJobFileName(job);
         File jobDir = getJobDir(job.getJobStatus());
         new File(jobDir, jobFileName).delete();
     }
@@ -183,7 +189,7 @@ public class FileJobStorage implements JobStorage {
     }
 
     private void moveJob(Job job, File toDir) {
-        String jobFileName = fileNameGenerator.generate(job);
+        String jobFileName = getJobFileName(job);
 
         File jobFolder = getJobDir(job.getJobStatus());
         File jobFile = new File(jobFolder, jobFileName);
@@ -196,6 +202,19 @@ public class FileJobStorage implements JobStorage {
     private void moveFile(File from, File to) {
         boolean moved = from.renameTo(to);
         if (!moved) throw new JobStoreException("Cannot move " + from + " to " + to);
+    }
+
+    @Override
+    public void changeJobStatus(Job job, JobStatus jobStatus) {
+        logger.debug("Change status for job {} to {}", job, jobStatus);
+
+        remove(job);
+        job.setJobStatus(jobStatus);
+        store(job);
+    }
+
+    private String getJobFileName(Job job) {
+        return fileNameGenerator.generate(job);
     }
 
     public void setFileNameGenerator(ValueGenerator<Job, String> fileNameGenerator) {
