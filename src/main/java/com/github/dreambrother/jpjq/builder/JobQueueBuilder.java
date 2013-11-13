@@ -16,7 +16,6 @@ import com.github.dreambrother.jpjq.worker.DoneJobsGcWorker;
 import com.github.dreambrother.jpjq.worker.FailedJobsGcWorker;
 import com.github.dreambrother.jpjq.worker.StartingWorker;
 import com.github.dreambrother.jpjq.worker.WorkerScheduler;
-import org.joda.time.Duration;
 
 import java.io.File;
 import java.util.concurrent.Executors;
@@ -29,8 +28,7 @@ public class JobQueueBuilder {
     private JobExecutor jobExecutor;
     private JobVisitor jobVisitor;
     private DelayService delayService;
-    private Duration expirationDuration;
-    private Duration delay;
+    private JobsGcWorkerConfig jobsGcWorkerConfig;
 
     public JobQueueBuilder(File queueDir) {
         this.queueDir = queueDir;
@@ -52,9 +50,8 @@ public class JobQueueBuilder {
         return this;
     }
 
-    public JobQueueBuilder withJobsGc(Duration expirationDuration, Duration delay) {
-        this.expirationDuration = expirationDuration;
-        this.delay = delay;
+    public JobQueueBuilder withJobsGc(JobsGcWorkerConfig jobsGcWorkerConfig) {
+        this.jobsGcWorkerConfig = jobsGcWorkerConfig;
         return this;
     }
 
@@ -81,30 +78,27 @@ public class JobQueueBuilder {
     }
 
     private void scheduleJobsGcWorkersIfNecessary() {
-        if (expirationDuration != null) {
-            if (delay == null) {
-                throw new IncorrectConfigurationException("If expirationDuration was set, delay must be set too");
-            }
+        if (jobsGcWorkerConfig != null) {
             ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
             WorkerScheduler workerScheduler = new WorkerScheduler();
             workerScheduler.setScheduledExecutorService(executorService);
 
-            workerScheduler.scheduleJobsGcWorker(createDoneJobsGcWorker(), delay);
-            workerScheduler.scheduleJobsGcWorker(createFailedJobsGcWorker(), delay);
+            workerScheduler.scheduleJobsGcWorker(createDoneJobsGcWorker(), jobsGcWorkerConfig.getDelay());
+            workerScheduler.scheduleJobsGcWorker(createFailedJobsGcWorker(), jobsGcWorkerConfig.getDelay());
         }
     }
 
     private DoneJobsGcWorker createDoneJobsGcWorker() {
         DoneJobsGcWorker worker = new DoneJobsGcWorker();
         worker.setJobStorage(getJobStorage());
-        worker.setExpirationDuration(expirationDuration);
+        worker.setExpirationDuration(jobsGcWorkerConfig.getExpirationDuration());
         return worker;
     }
 
     private FailedJobsGcWorker createFailedJobsGcWorker() {
         FailedJobsGcWorker worker = new FailedJobsGcWorker();
         worker.setJobStorage(getJobStorage());
-        worker.setExpirationDuration(expirationDuration);
+        worker.setExpirationDuration(jobsGcWorkerConfig.getExpirationDuration());
         return worker;
     }
 

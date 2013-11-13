@@ -73,7 +73,7 @@ public class JobQueueBuilderSystemTest {
         Duration delay = Duration.standardSeconds(10);
 
         JobQueue jobQueue = JobQueue.builder(queueDir)
-                .withJobsGc(expirationPeriod, delay)
+                .withJobsGc(new JobsGcWorkerConfig(expirationPeriod, delay))
                 .build();
 
         jobQueue.enqueue(initialJob());
