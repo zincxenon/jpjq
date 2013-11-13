@@ -12,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 import static com.github.dreambrother.jpjq.answer.Answers.assertStatusEq;
 import static com.github.dreambrother.jpjq.answer.Answers.withExceptionsAndThenNothing;
 import static com.github.dreambrother.jpjq.job.JobBuilder.initialJob;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class JobExecutorImplTest {
