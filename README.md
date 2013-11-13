@@ -26,7 +26,7 @@ Job submission looks like
 ```java
 jobQueue.enqueue(job);
 ```
-Where job is a subtype of `AbstractJob`, `RetryJob` or `RetryWithDelayJob`.
+Where `job` is a subtype of `AbstractJob`, `RetryJob` or `RetryWithDelayJob`.
 ```java
 class NopJob extends AbstractJob {
 
@@ -61,6 +61,8 @@ class RetryWithDelayNopJob extends RetryWithDelayJob {
     }
 }
 ```
+You can add custom fields to your Job implementation. Serialization is implemented with [Jackson](https://github.com/FasterXML/jackson).
+
 ### Another configuration parameters
 - `sync()` for synchronous `JobQueue` creation (for tests, or if you have some synchronous tasks, but you don't want to break the base system concept!)
 
