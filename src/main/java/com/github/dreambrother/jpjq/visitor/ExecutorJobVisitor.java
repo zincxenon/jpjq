@@ -25,7 +25,7 @@ public class ExecutorJobVisitor implements JobVisitor {
                 return;
             } catch (Exception ex) {
                 logger.warn("Attempt {} for job {} with attempts count {}", i, job, job.getAttemptCount());
-                if (job.getDelay() > 0) {
+                if (job.getDelay().getMillis() > 0) {
                     logger.info("Wait {} millis before next attempt", job.getDelay());
                     delayService.delay(job.getDelay());
                 }

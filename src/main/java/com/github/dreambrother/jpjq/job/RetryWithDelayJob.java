@@ -1,13 +1,14 @@
 package com.github.dreambrother.jpjq.job;
 
 import com.github.dreambrother.jpjq.visitor.JobVisitor;
+import org.joda.time.Duration;
 
 public abstract class RetryWithDelayJob extends AbstractJob {
 
-    private long delay;
+    private Duration delay;
     private int attemptCount;
 
-    public RetryWithDelayJob(long delay, int attemptCount) {
+    public RetryWithDelayJob(Duration delay, int attemptCount) {
         this.delay = delay;
         this.attemptCount = attemptCount;
     }
@@ -17,7 +18,7 @@ public abstract class RetryWithDelayJob extends AbstractJob {
         visitor.visit(this);
     }
 
-    public long getDelay() {
+    public Duration getDelay() {
         return delay;
     }
 
