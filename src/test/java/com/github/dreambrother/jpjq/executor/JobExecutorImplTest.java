@@ -36,53 +36,22 @@ public class JobExecutorImplTest {
     }
 
     @Test
-    public void shouldExecuteJob() {
-        Job job = new MockJob(runnableMock);
-
-        sut.execute(job);
-
-        verify(runnableMock).run();
-        assertEquals(JobStatus.DONE, job.getJobStatus());
-    }
-
-    @Test
-    public void shouldFailJobAfterException() {
-        Job job = new MockJob(runnableMock);
-
-        doThrow(new RuntimeException("That's ok")).when(runnableMock).run();
-        sut.execute(job);
-
-        assertEquals(JobStatus.FAILED, job.getJobStatus());
-    }
-
-    @Test
-    public void shouldSetInProgressStatusBeforeExecute() {
-        Job job = new MockJob(runnableMock);
-
-        doAnswer(assertStatusEq(JobStatus.IN_PROGRESS, job)).when(runnableMock).run();
-        sut.execute(job);
-
-        verify(runnableMock).run();
-    }
-
-    @Test
     public void shouldMoveJobToInProgress() {
         Job job = initialJob();
 
-        doAnswer(assertStatusEq(JobStatus.INITIAL, job)).when(jobStorageMock).moveToInProgress(job);
+        doAnswer(assertStatusEq(JobStatus.INITIAL, job)).when(jobStorageMock).changeJobStatus(job, JobStatus.IN_PROGRESS);
         sut.execute(job);
 
-        verify(jobStorageMock).moveToInProgress(job);
+        verify(jobStorageMock).changeJobStatus(job, JobStatus.IN_PROGRESS);
     }
 
     @Test
     public void shouldMoveJobToDone() {
         Job job = initialJob();
 
-        doAnswer(assertStatusEq(JobStatus.IN_PROGRESS, job)).when(jobStorageMock).moveToDone(job);
         sut.execute(job);
 
-        verify(jobStorageMock).moveToDone(job);
+        verify(jobStorageMock).changeJobStatus(job, JobStatus.DONE);
     }
 
     @Test
@@ -90,10 +59,9 @@ public class JobExecutorImplTest {
         Job job = new MockJob(runnableMock);
 
         doThrow(new RuntimeException("That's ok")).when(runnableMock).run();
-        doAnswer(assertStatusEq(JobStatus.IN_PROGRESS, job)).when(jobStorageMock).moveToFailed(job);
         sut.execute(job);
 
-        verify(jobStorageMock).moveToFailed(job);
+        verify(jobStorageMock).changeJobStatus(job, JobStatus.FAILED);
     }
 
     @Test
@@ -103,7 +71,7 @@ public class JobExecutorImplTest {
         doAnswer(withExceptionsAndThenNothing(1)).when(runnableMock).run();
         sut.execute(job);
 
-        assertEquals(JobStatus.DONE, job.getJobStatus());
+        verify(jobStorageMock).changeJobStatus(job, JobStatus.DONE);
     }
 
     @Test
@@ -114,7 +82,7 @@ public class JobExecutorImplTest {
         sut.execute(job);
 
         verify(runnableMock, times(job.getAttemptCount())).run();
-        assertEquals(JobStatus.FAILED, job.getJobStatus());
+        verify(jobStorageMock).changeJobStatus(job, JobStatus.FAILED);
     }
 
     @Test

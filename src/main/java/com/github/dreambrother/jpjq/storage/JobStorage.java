@@ -17,9 +17,5 @@ public interface JobStorage {
     List<? extends Job> findAll();
     List<? extends Job> findDone();
 
-    void moveToInProgress(Job job);
-    void moveToDone(Job job);
-    void moveToFailed(Job job);
-
     void changeJobStatus(Job job, JobStatus jobStatus);
 }

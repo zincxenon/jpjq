@@ -18,18 +18,14 @@ public class JobExecutorImpl implements JobExecutor {
     public void execute(Job job) {
         try {
             logger.debug("Start executing job {}", job);
-            jobStorage.moveToInProgress(job);
-            job.setJobStatus(JobStatus.IN_PROGRESS);
+            jobStorage.changeJobStatus(job, JobStatus.IN_PROGRESS);
             job.visit(jobVisitor);
 
             logger.debug("Finish executing job {}", job);
-            jobStorage.moveToDone(job);
-            job.setJobStatus(JobStatus.DONE);
+            jobStorage.changeJobStatus(job, JobStatus.DONE);
         } catch (Exception ex) {
             logger.warn("Job failed {}", job, ex);
-
-            jobStorage.moveToFailed(job);
-            job.setJobStatus(JobStatus.FAILED);
+            jobStorage.changeJobStatus(job, JobStatus.FAILED);
         }
     }
 
