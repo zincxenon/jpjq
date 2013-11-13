@@ -17,10 +17,12 @@ public class JobExecutorImpl implements JobExecutor {
     @Override
     public void execute(Job job) {
         try {
+            logger.debug("Start executing job {}", job);
             jobStorage.moveToInProgress(job);
             job.setJobStatus(JobStatus.IN_PROGRESS);
             job.visit(jobVisitor);
 
+            logger.debug("Finish executing job {}", job);
             jobStorage.moveToDone(job);
             job.setJobStatus(JobStatus.DONE);
         } catch (Exception ex) {
