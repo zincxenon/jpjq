@@ -26,10 +26,10 @@ public class JobQueueBuilderSystemTest {
         queueDir = Files.createTempDirectory("queue").toFile();
     }
 
-    @After
-    public void destroy() throws IOException {
-        FileUtils.forceDelete(queueDir);
-    }
+//    @After
+//    public void destroy() throws IOException {
+//        FileUtils.forceDelete(queueDir);
+//    }
 
     @Test
     public void shouldBuildJobQueue() {
