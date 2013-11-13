@@ -63,6 +63,8 @@ class RetryWithDelayNopJob extends RetryWithDelayJob {
 ```
 You can add custom fields to your Job implementation. Serialization is implemented with [Jackson](https://github.com/FasterXML/jackson).
 
+Also, `JobQueue` implements `getInitial()`, `getInProgress()`, `getDone()`, `getFailed()` and `getAll()` methods, which return list of jobs.
+
 ### Another configuration parameters
 - `sync()` for synchronous `JobQueue` creation (for tests, or if you have some synchronous tasks, but you don't want to break the base system concept!)
 
