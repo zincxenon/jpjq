@@ -49,7 +49,7 @@ public class JobExecutorImplTest {
     public void shouldFailJobAfterException() {
         Job job = new MockJob(runnableMock);
 
-        doThrow(RuntimeException.class).when(runnableMock).run();
+        doThrow(new RuntimeException("That's ok")).when(runnableMock).run();
         sut.execute(job);
 
         assertEquals(JobStatus.FAILED, job.getJobStatus());
