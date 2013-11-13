@@ -19,7 +19,7 @@ Examples
 ```java
 JobQueue jobQueue = JobQueue.builder(queueDir).build();
 ```
-where `queueDir` is java.io.File directory in which jobs will be stored.
+where `queueDir` is `java.io.File` directory in which jobs will be stored.
 After `JobQueue` construction, `queueDir` will be created (if it's not) with `initial`, `inprogress` and `done` subfolders. This folders will contains jobs with corresponding lifecycle status.
 
 Job submission looks like
@@ -87,7 +87,7 @@ JobQueue jobQueue = JobQueue.builder(queueDir)
         .build();
 ```
 where `expirationDuration` is the duration before job expiration and `delay` is the period between successive execution.
-And all together (of course you can't set `sync()` and `poolSize()` for the same `JobQueue` :) )
+And all together (of course, you can't set `sync()` and `poolSize()` for the same `JobQueue` :) )
 ```java
 JobQueue jobQueue = JobQueue.builder(queueDir)
         .poolSize(200)
