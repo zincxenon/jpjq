@@ -95,7 +95,7 @@ And all together (of course, you can't set `sync()` and `poolSize()` for the sam
 ```java
 JobQueue jobQueue = JobQueue.builder(queueDir)
         .poolSize(200)
-        .withJobsGc(new JobsGcWorkerConfig(expirationDuration, delay))
+        .withJobsGc(new JobsGcConfig(expirationDuration, delay))
         .build();
 ```
 
