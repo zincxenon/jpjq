@@ -1,6 +1,6 @@
 package com.github.dreambrother.jpjq.storage;
 
-import com.github.dreambrother.jpjq.generator.ValueGenerator;
+import com.github.dreambrother.jpjq.generator.JobFileNameGenerator;
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.JobStatus;
 import com.github.dreambrother.jpjq.json.JobFileUtils;
@@ -23,7 +23,7 @@ public class FileJobStorage implements JobStorage {
     private File doneDir;
     private File failedDir;
 
-    private ValueGenerator<Job, String> fileNameGenerator;
+    private JobFileNameGenerator fileNameGenerator;
 
     private List<File> jobFolders;
     private Map<JobStatus, File> jobStatusToDirMapping = new HashMap<>();
@@ -182,7 +182,7 @@ public class FileJobStorage implements JobStorage {
         return fileNameGenerator.generate(job);
     }
 
-    public void setFileNameGenerator(ValueGenerator<Job, String> fileNameGenerator) {
+    public void setFileNameGenerator(JobFileNameGenerator fileNameGenerator) {
         this.fileNameGenerator = fileNameGenerator;
     }
 }
