@@ -2,12 +2,12 @@ package com.github.dreambrother.jpjq.builder;
 
 import org.joda.time.Duration;
 
-public class JobsGcWorkerConfig {
+public class JobsGcConfig {
 
     private Duration expirationDuration;
     private Duration delay;
 
-    public JobsGcWorkerConfig(Duration expirationDuration, Duration delay) {
+    public JobsGcConfig(Duration expirationDuration, Duration delay) {
         this.expirationDuration = expirationDuration;
         this.delay = delay;
     }

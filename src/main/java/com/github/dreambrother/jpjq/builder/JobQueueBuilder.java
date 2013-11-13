@@ -28,7 +28,7 @@ public class JobQueueBuilder {
     private JobExecutor jobExecutor;
     private JobVisitor jobVisitor;
     private DelayService delayService;
-    private JobsGcWorkerConfig jobsGcWorkerConfig;
+    private JobsGcConfig jobsGcConfig;
 
     public JobQueueBuilder(File queueDir) {
         this.queueDir = queueDir;
@@ -50,8 +50,8 @@ public class JobQueueBuilder {
         return this;
     }
 
-    public JobQueueBuilder withJobsGc(JobsGcWorkerConfig jobsGcWorkerConfig) {
-        this.jobsGcWorkerConfig = jobsGcWorkerConfig;
+    public JobQueueBuilder withJobsGc(JobsGcConfig jobsGcConfig) {
+        this.jobsGcConfig = jobsGcConfig;
         return this;
     }
 
@@ -78,27 +78,27 @@ public class JobQueueBuilder {
     }
 
     private void scheduleJobsGcWorkersIfNecessary() {
-        if (jobsGcWorkerConfig != null) {
+        if (jobsGcConfig != null) {
             ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
             WorkerScheduler workerScheduler = new WorkerScheduler();
             workerScheduler.setScheduledExecutorService(executorService);
 
-            workerScheduler.scheduleJobsGcWorker(createDoneJobsGcWorker(), jobsGcWorkerConfig.getDelay());
-            workerScheduler.scheduleJobsGcWorker(createFailedJobsGcWorker(), jobsGcWorkerConfig.getDelay());
+            workerScheduler.scheduleJobsGcWorker(createDoneJobsGcWorker(), jobsGcConfig.getDelay());
+            workerScheduler.scheduleJobsGcWorker(createFailedJobsGcWorker(), jobsGcConfig.getDelay());
         }
     }
 
     private DoneJobsGcWorker createDoneJobsGcWorker() {
         DoneJobsGcWorker worker = new DoneJobsGcWorker();
         worker.setJobStorage(getJobStorage());
-        worker.setExpirationDuration(jobsGcWorkerConfig.getExpirationDuration());
+        worker.setExpirationDuration(jobsGcConfig.getExpirationDuration());
         return worker;
     }
 
     private FailedJobsGcWorker createFailedJobsGcWorker() {
         FailedJobsGcWorker worker = new FailedJobsGcWorker();
         worker.setJobStorage(getJobStorage());
-        worker.setExpirationDuration(jobsGcWorkerConfig.getExpirationDuration());
+        worker.setExpirationDuration(jobsGcConfig.getExpirationDuration());
         return worker;
     }
 
