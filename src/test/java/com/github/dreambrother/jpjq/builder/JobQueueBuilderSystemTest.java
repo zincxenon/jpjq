@@ -4,9 +4,7 @@ import com.github.dreambrother.jpjq.JobQueue;
 import com.github.dreambrother.jpjq.exceptions.IncorrectConfigurationException;
 import com.github.dreambrother.jpjq.job.JobStatus;
 import com.github.dreambrother.jpjq.job.SimpleJob;
-import org.apache.commons.io.FileUtils;
 import org.joda.time.Duration;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,11 +23,6 @@ public class JobQueueBuilderSystemTest {
     public void init() throws IOException {
         queueDir = Files.createTempDirectory("queue").toFile();
     }
-
-//    @After
-//    public void destroy() throws IOException {
-//        FileUtils.forceDelete(queueDir);
-//    }
 
     @Test
     public void shouldBuildJobQueue() {
