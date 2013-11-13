@@ -4,8 +4,6 @@ import com.github.dreambrother.jpjq.generator.JobFileNameGenerator;
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.JobStatus;
 import com.github.dreambrother.jpjq.json.JobFileUtils;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -158,15 +156,13 @@ public class FileJobStorage implements JobStorage {
     }
 
     private List<? extends Job> allInFolder(File dir) {
-        return Lists.transform(Arrays.asList(dir.listFiles()), readFromFileF());
-    }
+        File[] files = dir.listFiles();
 
-    private Function<File, Job> readFromFileF() {
-        return new Function<File, Job>() {
-            public Job apply(File file) {
-                return JobFileUtils.read(file);
-            }
-        };
+        List<Job> result = new ArrayList<>(files.length);
+        for (File file : files) {
+            result.add(JobFileUtils.read(file));
+        }
+        return result;
     }
 
     @Override
