@@ -87,7 +87,7 @@ Duration expirationDuration = Duration.standardHours(1);
 Duration delay = Duration.standardSeconds(10);
 
 JobQueue jobQueue = JobQueue.builder(queueDir)
-        .withJobsGc(new JobsGcWorkerConfig(expirationDuration, delay))
+        .withJobsGc(new JobsGcConfig(expirationDuration, delay))
         .build();
 ```
 where `expirationDuration` is the duration before job expiration and `delay` is the period between successive execution.
