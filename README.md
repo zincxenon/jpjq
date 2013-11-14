@@ -1,4 +1,4 @@
-jPJQ
+JPJQ
 ====
 
 Java Persistent Job Queue
@@ -15,7 +15,7 @@ If your application execute many heavyweight asynchronous jobs and you want this
 
 Examples
 --------
-### Simplest configuration for jPJQ looks like
+### Simplest configuration for JPJQ looks like
 ```java
 JobQueue jobQueue = JobQueue.builder(queueDir).build();
 ```
