@@ -66,7 +66,7 @@ You can add custom fields to your Job implementation. Serialization is implement
 Also, `JobQueue` implements `getInitial()`, `getInProgress()`, `getDone()`, `getFailed()` and `getAll()` methods, which return list of jobs.
 
 ### Another configuration parameters
-- `sync()` for synchronous `JobQueue` creation (for tests, or if you have some synchronous tasks, but you don't want to break the base system concept!)
+- `sync()` for synchronous `JobQueue` creation (for tests, or if you have some synchronous tasks, but you don't want to break the base concept of the system!)
 
 ```java
 JobQueue jobQueue = JobQueue.builder(queueDir)
@@ -98,6 +98,27 @@ JobQueue jobQueue = JobQueue.builder(queueDir)
         .withJobsGc(new JobsGcConfig(expirationDuration, delay))
         .build();
 ```
+
+Performance
+-----------
+For performance testing I used [jLoad](https://github.com/dreambrother/jload). 
+All tests was executed on my MacBook Pro ME662 i5-2.6(3.2)GHz/8GB/256GB SSD.
+
+### Sync JobQueue
+Tested with 100 000 jobs
+
+Writing threads | 1 | 4 | 16 
+--- | --- | --- | --- 
+--- | 0,64394 ms | 0,43676 ms | 0,40101 ms
+
+### Async JobQueue
+Tested with 100 000 jobs
+
+JobQueue poolSize \ Writing threads | 1 | 4 | 16
+--- | --- | --- | ---
+4 | 0,44405 ms | 1,14212 ms | 0,85198 ms
+16 | 0,41511 ms | 0,41746 ms | 0,84239 ms
+32 | 0,44807 ms | 0,42685 ms | 0,52547 ms
 
 License
 -------
