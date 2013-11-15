@@ -9,9 +9,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Random;
 
 import static com.github.dreambrother.jpjq.job.JobBuilder.*;
 import static org.junit.Assert.assertEquals;
@@ -237,6 +239,23 @@ public class FileJobStorageIntTest {
 
         assertEquals(JobStatus.IN_PROGRESS, job.getJobStatus());
         assertContains(actual, job);
+    }
+
+    @Test
+    public void shouldNotBeenCorruptedByBadFiles() throws IOException {
+        createBadJson();
+        List<? extends Job> actual = sut.findAll();
+
+        assertTrue("List should be empty", actual.isEmpty());
+    }
+
+    private File createBadJson() throws IOException {
+        File initial = new File(storeDir, "initial");
+        File file = new File(initial, String.valueOf(new Random().nextLong()));
+        FileOutputStream fos = new FileOutputStream(file);
+        String badJson = "{\"id\":\"123\",\"jobStatus\":\"INITIAL\"";
+        fos.write(badJson.getBytes());
+        return file;
     }
 
     private void assertContains(List<? extends Job> actual, Job... jobs) {

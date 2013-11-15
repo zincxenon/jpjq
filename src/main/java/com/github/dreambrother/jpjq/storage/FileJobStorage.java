@@ -1,5 +1,6 @@
 package com.github.dreambrother.jpjq.storage;
 
+import com.github.dreambrother.jpjq.exceptions.JobReadException;
 import com.github.dreambrother.jpjq.generator.JobFileNameGenerator;
 import com.github.dreambrother.jpjq.job.Job;
 import com.github.dreambrother.jpjq.job.JobStatus;
@@ -160,7 +161,11 @@ public class FileJobStorage implements JobStorage {
 
         List<Job> result = new ArrayList<>(files.length);
         for (File file : files) {
-            result.add(JobFileUtils.read(file));
+            try {
+                result.add(JobFileUtils.read(file));
+            } catch (JobReadException ex) {
+                logger.warn("Cannot read json from file {}", file);
+            }
         }
         return result;
     }
