@@ -103,6 +103,7 @@ Performance
 -----------
 For performance testing I used [jLoad](https://github.com/dreambrother/jload). 
 All tests was executed on my MacBook Pro ME662 i5-2.6(3.2)GHz/8GB/256GB SSD.
+Cells contains spent time for one operation.
 
 ### Sync JobQueue
 Tested with 100 000 jobs
