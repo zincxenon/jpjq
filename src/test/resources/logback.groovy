@@ -3,4 +3,4 @@ appender("STDOUT", ConsoleAppender) {
         pattern = "%c{5} %msg%n %ex{0}"
     }
 }
-root(ALL, ["STDOUT"])
+root(ERROR, ["STDOUT"])
