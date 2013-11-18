@@ -5,10 +5,6 @@ Java Persistent Job Queue
 
 [![Build Status](https://travis-ci.org/dreambrother/jpjq.png?branch=master)](https://travis-ci.org/dreambrother/jpjq)
 
-Status
-------
-Development
-
 Usage
 ------
 If your application execute many heavyweight asynchronous jobs and you want this jobs to continue execute after restart - this library is what you need :).
