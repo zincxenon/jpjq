@@ -164,7 +164,7 @@ public class FileJobStorage implements JobStorage {
             try {
                 result.add(JobFileUtils.read(file));
             } catch (JobReadException ex) {
-                logger.warn("Cannot read json from file {}", file);
+                logger.warn("Cannot read json from file {}", file, ex);
             }
         }
         return result;
