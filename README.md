@@ -112,12 +112,10 @@ Writing threads | 1 | 4 | 16
 --- | --- | --- | --- 
 --- | 0,64394 ms | 0,43676 ms | 0,40101 ms
 
-Current version
----------------
-[1.1](https://bintray.com/dreambrother/maven/public/1.1?sort=&order=)
-
 Maven
 -----
+Binaries are hosted on [Bintray](https://bintray.com)
+
 ```xml
 <repositories>
     <repository>
@@ -135,6 +133,10 @@ Maven
     </dependency>
 </dependencies>
 ```
+
+Current version
+---------------
+[1.1](https://bintray.com/dreambrother/maven/public/1.1?sort=&order=)
 
 License
 -------
