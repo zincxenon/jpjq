@@ -16,7 +16,7 @@ Examples
 JobQueue jobQueue = JobQueue.builder(queueDir).build();
 ```
 where `queueDir` is `java.io.File` directory in which jobs will be stored.
-After `JobQueue` construction, `queueDir` will be created (if it's not) with `initial`, `inprogress` and `done` subfolders. This folders will contains jobs with corresponding lifecycle status.
+After `JobQueue` construction, `queueDir` will be created (if it's not) with `initial`, `inprogress`, `done` and `failed` subfolders. This folders will contains jobs with corresponding lifecycle status.
 
 Job submission looks like
 ```java
