@@ -9,7 +9,7 @@ Status
 ------
 Development
 
-Usages
+Usage
 ------
 If your application execute many heavyweight asynchronous jobs and you want this jobs to continue execute after restart - this library is what you need :).
 
@@ -103,7 +103,7 @@ Performance
 -----------
 For performance testing I used [jLoad](https://github.com/dreambrother/jload). 
 All tests was executed on my MacBook Pro ME662 i5-2.6(3.2)GHz/8GB/256GB SSD.
-Cells contains spent time for one operation.
+Result is a spent time for one operation.
 
 ### Sync JobQueue
 Tested with 100 000 jobs
@@ -112,14 +112,29 @@ Writing threads | 1 | 4 | 16
 --- | --- | --- | --- 
 --- | 0,64394 ms | 0,43676 ms | 0,40101 ms
 
-### Async JobQueue
-Tested with 100 000 jobs
+Current version
+---------------
+[1.1](https://bintray.com/dreambrother/maven/public/1.1?sort=&order=)
 
-JobQueue poolSize \ Writing threads | 1 | 4 | 16
---- | --- | --- | ---
-4 | 0,44405 ms | 1,14212 ms | 0,85198 ms
-16 | 0,41511 ms | 0,41746 ms | 0,84239 ms
-32 | 0,44807 ms | 0,42685 ms | 0,52547 ms
+Maven
+-----
+```xml
+<repositories>
+    <repository>
+        <id>central</id>
+        <name>bintray</name>
+        <url>http://dl.bintray.com/dreambrother/maven</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>com.github.dreambrother</groupId>
+        <artifactId>jpjq</artifactId>
+        <version>1.1</version>
+    </dependency>
+</dependencies>
+```
 
 License
 -------
