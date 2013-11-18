@@ -102,4 +102,12 @@
             <url>https://raw.github.com/dreambrother/dreambrother-mvn-repo/master/releases</url>
         </pluginRepository>
     </pluginRepositories>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-dreambrother-maven-public</id>
+            <name>dreambrother-maven-public</name>
+            <url>https://api.bintray.com/maven/dreambrother/maven/public</url>
+        </repository>
+    </distributionManagement>
 </project>
