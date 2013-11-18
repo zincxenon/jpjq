@@ -8,12 +8,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.Instant;
 
+import java.util.UUID;
+
 /**
  * Not thread safe. Do not share between threads.
  */
 public abstract class AbstractJob implements Job {
 
-    private String id;
+    private String id = UUID.randomUUID().toString();
     private JobStatus jobStatus = JobStatus.INITIAL;
     @JsonSerialize(using = InstantSerializer.class)
     private Instant creationInstant = Instant.now();
