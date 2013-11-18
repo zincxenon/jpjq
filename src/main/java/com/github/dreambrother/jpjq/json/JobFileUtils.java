@@ -1,5 +1,6 @@
 package com.github.dreambrother.jpjq.json;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dreambrother.jpjq.exceptions.JobReadException;
 import com.github.dreambrother.jpjq.exceptions.JobStoreException;
@@ -14,6 +15,7 @@ public class JobFileUtils {
 
     static {
         objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     private JobFileUtils() {}
